@@ -2,10 +2,12 @@
 
 import { X, Zap, Image as ImageIcon, QrCode } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function ScanPage() {
   const router = useRouter();
-
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-black flex flex-col w-full relative">
       {/* Camera View Simulation */}
@@ -22,7 +24,7 @@ export default function ScanPage() {
           <div className="absolute top-0 left-0 w-full h-1 bg-[#1873CC]/50 shadow-[0_0_15px_#1873CC] animate-scan" />
         </div>
         
-        <p className="text-white mt-12 text-sm font-medium">Scan any QR code to pay</p>
+        <p className="text-white mt-12 text-sm font-medium">{t.scanAnyQrCodeToPay}</p>
       </div>
 
       {/* Top Controls */}
@@ -44,14 +46,14 @@ export default function ScanPage() {
           <div className="bg-white/10 p-4 rounded-full text-white">
             <ImageIcon className="w-6 h-6" />
           </div>
-          <span className="text-white text-xs">Album</span>
+          <span className="text-white text-xs">{t.album}</span>
         </button>
 
         <button className="flex flex-col items-center gap-2">
           <div className="bg-[#1873CC] p-6 rounded-full text-white shadow-[0_0_20px_rgba(24,115,204,0.4)]">
             <QrCode className="w-8 h-8" />
           </div>
-          <span className="text-white text-xs font-bold">My QR</span>
+          <span className="text-white text-xs font-bold">{t.myQr}</span>
         </button>
 
         <div className="w-20" /> {/* Spacer */}

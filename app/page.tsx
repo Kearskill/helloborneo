@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useLanguage } from './context/LanguageContext';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, User } from 'lucide-react';
 import { translations, Language } from './translations';
@@ -70,9 +71,9 @@ function FieldRow({
 }
 
 export default function App() {
-  const router = useRouter();
+  const { language, setLanguage, t } = useLanguage(); // Use global context
   const [step, setStep] = useState(1);
-  const [language, setLanguage] = useState<Language>('english');
+  const router = useRouter();
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
 
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -144,7 +145,6 @@ export default function App() {
     setStep(1);
   };
 
-  const t = translations[language];
 
   // Active field glow class
   const fieldGlow = (field: FieldKey) =>

@@ -3,8 +3,10 @@ import { ArrowLeft, User, ShieldCheck, Info } from "lucide-react";
 import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGuide } from "@/app/context/GuideContext";
+import { useLanguage } from '../context/LanguageContext';
 
 function TransferMoneyContent() {
+  const { t } = useLanguage(); // Called inside the component
   const router = useRouter();
   const params = useSearchParams();
 
@@ -14,7 +16,7 @@ function TransferMoneyContent() {
   const { guide, advanceGuide } = useGuide();
   const balance = 125.50;
   const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("Fund Transfer");
+  const [note, setNote] = useState(t.fundTransfer || "Fund Transfer");
 
   // Pre-fill amount from guide
   useEffect(() => {
@@ -44,14 +46,14 @@ function TransferMoneyContent() {
           <button onClick={() => router.back()} className="text-white p-1">
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-white text-xl font-bold">Transfer Money</h1>
+          <h1 className="text-white text-xl font-bold">{t.transferMoney || "Transfer Money"}</h1>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6">
         {/* Transfer to */}
         <div>
-          <p className="text-[#0066CC] text-sm font-semibold mb-2">Transfer to</p>
+          <p className="text-[#0066CC] text-sm font-semibold mb-2">{t.transferTo || "Transfer to"}</p>
 
           {/* Recipient card */}
           <div className="border border-gray-200 rounded-2xl p-4 flex items-center gap-4 bg-gray-50">
@@ -70,14 +72,14 @@ function TransferMoneyContent() {
           <div className="mt-2 flex items-center gap-2 bg-blue-50 rounded-xl px-3 py-2">
             <ShieldCheck className="w-4 h-4 text-[#0066CC] shrink-0" />
             <p className="text-xs text-gray-600">
-              Always verify recipient name before transferring.
+              {t.alwaysVerifyRecipientNameBeforeTransferring || "Always verify recipient name before transferring."}
             </p>
           </div>
         </div>
 
         {/* Amount */}
         <div className="border-b border-gray-200 pb-4">
-          <p className="text-gray-500 text-sm mb-1">Amount</p>
+          <p className="text-gray-500 text-sm mb-1">{t.amount || "Amount"}</p>
           <div className="flex items-baseline gap-1">
             <span className="text-[#0066CC] text-2xl font-bold">RM</span>
             <input
@@ -91,7 +93,7 @@ function TransferMoneyContent() {
           </div>
           <div className="flex items-center gap-1 mt-1">
             <p className="text-gray-400 text-xs">
-              You can transfer up to{" "}
+              {t.youCanTransferUpTo || "You can transfer up to"}{" "}
               <span className="font-semibold text-gray-600">RM {balance.toFixed(2)}</span>
             </p>
             <Info className="w-3.5 h-3.5 text-gray-400" />
@@ -100,7 +102,7 @@ function TransferMoneyContent() {
 
         {/* Transfer note */}
         <div className="border-b border-gray-200 pb-4">
-          <p className="text-gray-400 text-xs mb-1">What&apos;s the transfer for?</p>
+          <p className="text-gray-400 text-xs mb-1">{t.whatsTheTransferFor || "What's the transfer for?"}</p>
           <input
             type="text"
             value={note}
@@ -123,13 +125,12 @@ function TransferMoneyContent() {
               `/TransferSuccess?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&amount=${encodeURIComponent(amount)}&note=${encodeURIComponent(note)}`
             );
           }}
-          className={`w-full py-4 rounded-2xl text-white font-bold text-base transition-all ${
-            pulseNext
-              ? "bg-[#0066CC] ring-4 ring-[#0066CC]/40 animate-pulse"
-              : isValid
+          className={`w-full py-4 rounded-2xl text-white font-bold text-base transition-all ${pulseNext
+            ? "bg-[#0066CC] ring-4 ring-[#0066CC]/40 animate-pulse"
+            : isValid
               ? "bg-[#0066CC] active:opacity-80"
               : "bg-[#0066CC]/40 cursor-not-allowed"
-          }`}
+            }`}
         >
           Next
         </button>

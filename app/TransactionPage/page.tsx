@@ -3,6 +3,7 @@ import { ArrowLeft, User, RefreshCw, ChevronDown, Info } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGuide } from "@/app/context/GuideContext";
+import { useLanguage } from '../context/LanguageContext';
 
 const CONTACTS = [
   { name: "Ali", phone: "+60 11-5123 4567" },
@@ -15,6 +16,7 @@ export default function TransactionPage() {
   const { guide, advanceGuide } = useGuide();
   const [search, setSearch] = useState("");
   const balance = 125.50;
+  const { t } = useLanguage(); // Called inside the component
 
   // Auto-populate search from guide
   const effectiveSearch = guide.active && guide.step === "select-contact" && !search
@@ -36,12 +38,12 @@ export default function TransactionPage() {
           <button onClick={() => router.back()} className="text-white p-1">
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-white text-xl font-bold">Transfer</h1>
+          <h1 className="text-white text-xl font-bold">{t.transfer || "Transfer"}</h1>
         </div>
 
         {/* Tabs */}
         <div className="flex border-b border-white/30">
-          
+
         </div>
       </div>
 
@@ -59,7 +61,7 @@ export default function TransactionPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Enter name or phone..."
+            placeholder={t.enterNameOrPhone || "Enter name or phone..."}
             className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none py-2"
           />
 
@@ -76,38 +78,37 @@ export default function TransactionPage() {
           const isGuided = guide.active && guide.step === "select-contact" &&
             contact.name.toLowerCase().includes(guide.contactName)
           return (
-          <button
-            key={i}
-            onClick={() => {
-              if (isGuided) advanceGuide()
-              router.push(
-                `/TransferMoney?name=${encodeURIComponent(contact.name)}&phone=${encodeURIComponent(contact.phone)}`
-              )
-            }}
-            className={`w-full flex items-center gap-4 px-4 py-3 transition-colors border-b border-gray-100 ${
-              isGuided
+            <button
+              key={i}
+              onClick={() => {
+                if (isGuided) advanceGuide()
+                router.push(
+                  `/TransferMoney?name=${encodeURIComponent(contact.name)}&phone=${encodeURIComponent(contact.phone)}`
+                )
+              }}
+              className={`w-full flex items-center gap-4 px-4 py-3 transition-colors border-b border-gray-100 ${isGuided
                 ? "bg-blue-50 ring-2 ring-inset ring-[#1873CC] animate-pulse"
                 : "hover:bg-gray-50 active:bg-gray-100"
-            }`}
-          >
-            {/* Avatar */}
-            <div className="w-11 h-11 rounded-full bg-[#E8F0FB] flex items-center justify-center shrink-0">
-              <User className="w-6 h-6 text-[#0066CC]" />
-            </div>
+                }`}
+            >
+              {/* Avatar */}
+              <div className="w-11 h-11 rounded-full bg-[#E8F0FB] flex items-center justify-center shrink-0">
+                <User className="w-6 h-6 text-[#0066CC]" />
+              </div>
 
-            {/* Info */}
-            <div className="text-left">
-              <p className="text-gray-900 font-semibold text-sm">{contact.name}</p>
-              <p className="text-gray-500 text-xs mt-0.5">{contact.phone}</p>
-            </div>
-          </button>
+              {/* Info */}
+              <div className="text-left">
+                <p className="text-gray-900 font-semibold text-sm">{contact.name}</p>
+                <p className="text-gray-500 text-xs mt-0.5">{contact.phone}</p>
+              </div>
+            </button>
           )
         })}
 
         {filtered.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">
             <User className="w-12 h-12 mb-3 opacity-30" />
-            <p className="text-sm">No contacts found</p>
+            <p className="text-sm">{t.noContactFound || "No contacts found"}</p>
           </div>
         )}
       </div>
@@ -115,7 +116,7 @@ export default function TransactionPage() {
       {/* Bottom balance bar */}
       <div className="px-4 py-3 pb-24 border-t border-gray-200 bg-white flex items-center justify-center gap-2">
         <p className="text-gray-600 text-sm">
-          Transferable eWallet balance:{" "}
+          {t.transferableEWalletBalance || "Transferable eWallet balance: "}{" "}
           <span className="font-semibold text-gray-800">RM {balance.toFixed(2)}</span>
         </p>
         <button className="text-[#0066CC]">
