@@ -12,7 +12,7 @@ const CONTACTS = [
 export default function TransactionPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const balance = 12.71;
+  const balance = 125.50;
 
   const filtered = CONTACTS.filter(
     (c) =>
@@ -34,18 +34,7 @@ export default function TransactionPage() {
 
         {/* Tabs */}
         <div className="flex border-b border-white/30">
-          {["Transfer", "Receive", "Money Packet", "Gift"].map((tab) => (
-            <button
-              key={tab}
-              className={`px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                tab === "Transfer"
-                  ? "text-white border-b-2 border-yellow-400"
-                  : "text-white/60"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          
         </div>
       </div>
 
@@ -79,6 +68,11 @@ export default function TransactionPage() {
         {filtered.map((contact, i) => (
           <button
             key={i}
+            onClick={() =>
+              router.push(
+                `/TransferMoney?name=${encodeURIComponent(contact.name)}&phone=${encodeURIComponent(contact.phone)}`
+              )
+            }
             className="w-full flex items-center gap-4 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-100"
           >
             {/* Avatar */}
