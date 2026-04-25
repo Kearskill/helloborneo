@@ -71,7 +71,7 @@ function FieldRow({
 }
 
 export default function App() {
-  const { language, setLanguage, t } = useLanguage(); // Use global context
+  const { language, setLanguage, t, speakText } = useLanguage(); // Add speakText
   const [step, setStep] = useState(1);
   const router = useRouter();
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
@@ -98,17 +98,40 @@ export default function App() {
     setGlowActive(true);
 
     if (field === 'done') {
+      // Play audio for done/confirm
+      if (lang === 'iban' || lang === 'kadazan' || lang === 'dusun') {
+        speakText('confirm', lang);
+      }
       speakTimer.current = setTimeout(() => setIsSpeaking(false), 2500);
       return;
     }
 
     speakTimer.current = setTimeout(() => {
       setIsSpeaking(false);
+      // Focus will trigger onFocus which plays audio
       if (field === 'name')  nameRef.current?.focus();
       if (field === 'phone') phoneRef.current?.focus();
       if (field === 'email') emailRef.current?.focus();
     }, 2000);
-  }, []);
+  }, [speakText]);
+
+  const handleFieldFocus = (field: FieldKey) => {
+    setActiveField(field);
+    
+    // Play audio when field is focused
+    if (language === 'iban' || language === 'kadazan' || language === 'dusun') {
+      const audioMap: Record<FieldKey, string> = {
+        name: 'full name',
+        phone: 'phone',
+        email: 'email',
+        done: 'confirm',
+      };
+      const audioPhrase = audioMap[field];
+      if (audioPhrase) {
+        speakText(audioPhrase, language);
+      }
+    }
+  };
 
   useEffect(() => {
     if (step === 2) {
@@ -263,6 +286,7 @@ export default function App() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onFocus={() => handleFieldFocus('name')}
                     onBlur={(e) => handleFieldBlur('name', e.target.value)}
                     placeholder={t.fullNamePlaceholder}
                     className="w-full bg-transparent text-gray-800 text-base outline-none placeholder-gray-300 pb-1"
@@ -281,6 +305,7 @@ export default function App() {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onFocus={() => handleFieldFocus('phone')}
                       onBlur={(e) => handleFieldBlur('phone', e.target.value)}
                       placeholder={t.phonePlaceholder}
                       className="flex-1 bg-transparent text-gray-800 text-base outline-none placeholder-gray-300 pb-1"
@@ -296,6 +321,7 @@ export default function App() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onFocus={() => handleFieldFocus('email')}
                     onBlur={(e) => handleFieldBlur('email', e.target.value)}
                     placeholder={t.emailPlaceholder}
                     className="w-full bg-transparent text-gray-800 text-base outline-none placeholder-gray-300 pb-1"
