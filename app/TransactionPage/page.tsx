@@ -97,7 +97,7 @@ export default function TransactionPage() {
       </div>
 
       {/* Bottom balance bar */}
-      <div className="px-4 py-3 border-t border-gray-200 bg-white flex items-center justify-center gap-2">
+      <div className="px-4 py-3 pb-24 border-t border-gray-200 bg-white flex items-center justify-center gap-2">
         <p className="text-gray-600 text-sm">
           Transferable eWallet balance:{" "}
           <span className="font-semibold text-gray-800">RM {balance.toFixed(2)}</span>
