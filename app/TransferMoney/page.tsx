@@ -25,6 +25,13 @@ function TransferMoneyContent() {
     }
   }, [guide.active, guide.step, guide.amount]);
 
+  // Pre-fill amount from guide
+  useEffect(() => {
+    if (guide.active && guide.step === "enter-amount" && guide.amount) {
+      setAmount(guide.amount);
+    }
+  }, [guide.active, guide.step, guide.amount]);
+
   const numericAmount = parseFloat(amount) || 0;
   const isValid = numericAmount > 0 && numericAmount <= balance;
   const pulseNext = guide.active && guide.step === "enter-amount" && isValid;

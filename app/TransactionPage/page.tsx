@@ -102,6 +102,7 @@ export default function TransactionPage() {
                 <p className="text-gray-500 text-xs mt-0.5">{contact.phone}</p>
               </div>
             </button>
+
           )
         })}
 

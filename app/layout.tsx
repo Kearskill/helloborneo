@@ -46,8 +46,8 @@ export default function RootLayout({
             </div>
 
           </div>
-        </LanguageProvider >
-      </body >
-    </html >
+        </LanguageProvider>
+      </body>
+    </html>
   );
 }
