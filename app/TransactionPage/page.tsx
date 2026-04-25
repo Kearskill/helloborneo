@@ -1,0 +1,117 @@
+"use client"
+import { ArrowLeft, User, RefreshCw, ChevronDown, Info } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+const CONTACTS = [
+  { name: "Ali", phone: "+60 11-5123 4567" },
+  { name: "Bob", phone: "+60 14-5566 7788" },
+  { name: "Danish", phone: "+60 10-1122 3344" },
+];
+
+export default function TransactionPage() {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+  const balance = 12.71;
+
+  const filtered = CONTACTS.filter(
+    (c) =>
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.phone.includes(search)
+  );
+
+  return (
+    <div className="size-full flex flex-col bg-white">
+      {/* Blue Header */}
+      <div className="bg-[#0066CC] px-4 pt-10 pb-0">
+        {/* Top bar */}
+        <div className="flex items-center gap-3 mb-4">
+          <button onClick={() => router.back()} className="text-white p-1">
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <h1 className="text-white text-xl font-bold">Transfer</h1>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex border-b border-white/30">
+          {["Transfer", "Receive", "Money Packet", "Gift"].map((tab) => (
+            <button
+              key={tab}
+              className={`px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                tab === "Transfer"
+                  ? "text-white border-b-2 border-yellow-400"
+                  : "text-white/60"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Search bar */}
+      <div className="px-4 py-3 border-b border-gray-200">
+        <div className="flex items-center gap-2">
+          {/* Country code */}
+          <button className="flex items-center gap-1 text-gray-700 font-medium text-sm border border-gray-300 rounded-lg px-3 py-2">
+            <span>+60</span>
+            <ChevronDown className="w-4 h-4 text-gray-500" />
+          </button>
+
+          {/* Input */}
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Enter name or phone..."
+            className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none py-2"
+          />
+
+          {/* Refresh */}
+          <button className="text-[#0066CC]">
+            <RefreshCw className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Contacts list */}
+      <div className="flex-1 overflow-y-auto">
+        {filtered.map((contact, i) => (
+          <button
+            key={i}
+            className="w-full flex items-center gap-4 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-100"
+          >
+            {/* Avatar */}
+            <div className="w-11 h-11 rounded-full bg-[#E8F0FB] flex items-center justify-center shrink-0">
+              <User className="w-6 h-6 text-[#0066CC]" />
+            </div>
+
+            {/* Info */}
+            <div className="text-left">
+              <p className="text-gray-900 font-semibold text-sm">{contact.name}</p>
+              <p className="text-gray-500 text-xs mt-0.5">{contact.phone}</p>
+            </div>
+          </button>
+        ))}
+
+        {filtered.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+            <User className="w-12 h-12 mb-3 opacity-30" />
+            <p className="text-sm">No contacts found</p>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom balance bar */}
+      <div className="px-4 py-3 border-t border-gray-200 bg-white flex items-center justify-center gap-2">
+        <p className="text-gray-600 text-sm">
+          Transferable eWallet balance:{" "}
+          <span className="font-semibold text-gray-800">RM {balance.toFixed(2)}</span>
+        </p>
+        <button className="text-[#0066CC]">
+          <Info className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+}

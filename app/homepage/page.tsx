@@ -75,58 +75,58 @@ export default function App() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 px-3 -mt-3 overflow-y-auto">
-        {/* Main Actions Card */}
-        <div className="bg-white rounded-xl p-3 mb-3 shadow-sm">
-          <div className="grid grid-cols-3 gap-3">
-            <button
-              className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
-            >
-              <ArrowLeftRight className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
-              <span className="text-[11px] text-gray-800">Transfer</span>
-            </button>
+      {/* Main Actions */}
+      <div className="px-6 mb-6 flex-1">
+        <div className="grid grid-cols-3 gap-3 mb-3">
+          <button
+            onClick={() => router.push("/TransactionPage")}
+            className="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-md active:scale-[0.98] transition-transform">
+            <div className="bg-[#0066CC] rounded-full p-3">
+              <ArrowLeftRight className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-sm font-semibold text-gray-800">Transfer</span>
+          </button>
 
-            <button
-              onClick={() => router.push("/homepage/scan")}
-              className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
-            >
-              <Scan className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
-              <span className="text-[11px] text-gray-800">Scan</span>
-            </button>
+          <button
+            onClick={() => router.push("/homepage/scan")}
+            className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
+          >
+            <Scan className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
+            <span className="text-[11px] text-gray-800">Scan</span>
+          </button>
 
-            <button
-              onClick={() => router.push("/homepage/history")}
-              className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
-            >
-              <History className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
-              <span className="text-[11px] text-gray-800">History</span>
-            </button>
-          </div>
-        </div>
-
-        {/* See More Button */}
-        <button className="w-full bg-white rounded-xl p-2.5 flex items-center justify-center gap-1.5 mb-3 shadow-sm active:opacity-70">
-          <span className="text-[#1873CC] font-semibold text-xs">See More</span>
-          <ChevronRight className="w-3.5 h-3.5 text-[#1873CC]" />
-        </button>
-
-        {/* Summary Section */}
-        <div className="bg-white rounded-xl p-3 shadow-sm mb-3">
-          <h3 className="text-gray-800 font-semibold text-sm mb-2">Summary</h3>
-          <p className="text-gray-500 text-[10px] mb-0.5">You spent</p>
-          <p className="text-gray-900 font-bold text-2xl mb-0.5">RM {spending.toFixed(2)}</p>
-          <p className="text-gray-400 text-[10px]">This month</p>
+          <button
+            onClick={() => router.push("/homepage/history")}
+            className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
+          >
+            <History className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
+            <span className="text-[11px] text-gray-800">History</span>
+          </button>
         </div>
       </div>
 
-      {/* Voice Assistant Button - Fixed at Bottom */}
-      <div className="px-3 pb-4 pt-2 bg-[#F3F4F6] shrink-0">
-        <button className="w-full bg-[#1873CC] rounded-xl py-3 flex items-center justify-center gap-2.5 shadow-lg active:bg-[#1461A8]">
-          <Mic className="w-5 h-5 text-white" />
-          <span className="text-lg font-bold text-white">TnG Suara</span>
-        </button>
+      {/* See More Button */}
+      <button className="w-full bg-white rounded-xl p-2.5 flex items-center justify-center gap-1.5 mb-3 shadow-sm active:opacity-70">
+        <span className="text-[#1873CC] font-semibold text-xs">See More</span>
+        <ChevronRight className="w-3.5 h-3.5 text-[#1873CC]" />
+      </button>
+
+      {/* Summary Section */}
+      <div className="bg-white rounded-xl p-3 shadow-sm mb-3">
+        <h3 className="text-gray-800 font-semibold text-sm mb-2">Summary</h3>
+        <p className="text-gray-500 text-[10px] mb-0.5">You spent</p>
+        <p className="text-gray-900 font-bold text-2xl mb-0.5">RM {spending.toFixed(2)}</p>
+        <p className="text-gray-400 text-[10px]">This month</p>
       </div>
     </div>
+
+      {/* Voice Assistant Button - Fixed at Bottom */ }
+  <div className="px-3 pb-4 pt-2 bg-[#F3F4F6] shrink-0">
+    <button className="w-full bg-[#1873CC] rounded-xl py-3 flex items-center justify-center gap-2.5 shadow-lg active:bg-[#1461A8]">
+      <Mic className="w-5 h-5 text-white" />
+      <span className="text-lg font-bold text-white">TnG Suara</span>
+    </button>
+  </div>
+    </div >
   );
 }
