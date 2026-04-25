@@ -61,6 +61,8 @@ export function VoiceAssistant() {
       setIsProcessing(false)
       setTimeout(() => setFeedback(""), 5000)
     }
+    setTranscript("")
+    setTimeout(() => setFeedback(""), 3000)
   }
 
   return (
