@@ -107,6 +107,11 @@ function TransferMoneyContent() {
       <div className="px-4 pb-8 pt-3">
         <button
           disabled={!isValid}
+          onClick={() =>
+            router.push(
+              `/TransferSuccess?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&amount=${encodeURIComponent(amount)}&note=${encodeURIComponent(note)}`
+            )
+          }
           className={`w-full py-4 rounded-2xl text-white font-bold text-base transition-opacity ${
             isValid ? "bg-[#0066CC] active:opacity-80" : "bg-[#0066CC]/40 cursor-not-allowed"
           }`}
