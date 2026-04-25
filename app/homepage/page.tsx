@@ -8,7 +8,7 @@ export default function App() {
   const [spending] = useState(450.75);
 
   return (
-    <div className="min-h-screen h-screen bg-[#F3F4F6] flex flex-col max-w-md mx-auto overflow-hidden">
+    <div className="min-h-screen h-screen bg-[#F3F4F6] flex flex-col overflow-hidden w-full">
       {/* Status Bar Simulation */}
       <div className="bg-[#1873CC] px-3 pt-2 pb-1.5 flex items-center justify-between text-white text-[10px]">
         <span>20:02</span>
