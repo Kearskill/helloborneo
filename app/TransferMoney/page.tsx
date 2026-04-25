@@ -1,6 +1,6 @@
 "use client"
 import { ArrowLeft, User, ShieldCheck, Info } from "lucide-react";
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGuide } from "@/app/context/GuideContext";
 import { useLanguage } from '../context/LanguageContext';
@@ -18,22 +18,19 @@ function TransferMoneyContent() {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState(t.fundTransfer || "Fund Transfer");
 
-  // Pre-fill amount from guide
-  useEffect(() => {
-    if (guide.active && guide.step === "enter-amount" && guide.amount) {
-      setAmount(guide.amount);
-    }
-  }, [guide.active, guide.step, guide.amount]);
+  const amountRef = useRef<HTMLInputElement>(null);
 
-  // Pre-fill amount from guide
+  // When guided to this step, focus the amount field (don't pre-fill)
   useEffect(() => {
-    if (guide.active && guide.step === "enter-amount" && guide.amount) {
-      setAmount(guide.amount);
+    if (guide.active && guide.step === "enter-amount") {
+      setTimeout(() => amountRef.current?.focus(), 100);
     }
-  }, [guide.active, guide.step, guide.amount]);
+  }, [guide.active, guide.step]);
 
   const numericAmount = parseFloat(amount) || 0;
   const isValid = numericAmount > 0 && numericAmount <= balance;
+  // Pulse the amount field until user types something, then pulse Next
+  const pulseAmountField = guide.active && guide.step === "enter-amount" && !isValid;
   const pulseNext = guide.active && guide.step === "enter-amount" && isValid;
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,11 +82,16 @@ function TransferMoneyContent() {
         </div>
 
         {/* Amount */}
-        <div className="border-b border-gray-200 pb-4">
+        <div className={`border-b pb-4 transition-all duration-300 ${
+          pulseAmountField
+            ? "border-[#0066CC] ring-2 ring-[#0066CC]/30 rounded-xl px-3 animate-pulse"
+            : "border-gray-200"
+        }`}>
           <p className="text-gray-500 text-sm mb-1">{t.amount || "Amount"}</p>
           <div className="flex items-baseline gap-1">
             <span className="text-[#0066CC] text-2xl font-bold">RM</span>
             <input
+              ref={amountRef}
               type="text"
               inputMode="decimal"
               value={amount}

@@ -46,7 +46,6 @@ export function VoiceAssistant() {
 
         if (type === "transaction" && recipient && amount) {
           startGuide(recipient.toString(), amount.toString())
-          setFeedback(`Guiding: Transfer RM${amount} to ${recipient}`)
           setIsActive(false)
         } else {
           setFeedback(reasoning || "How else can I help you today?")
@@ -124,11 +123,14 @@ export function VoiceAssistant() {
       <button
         onClick={() => setIsActive(!isActive)}
         className={cn(
-          "absolute bottom-6 z-50 shadow-2xl transition-all duration-500 transform active:scale-[0.98] flex items-center justify-center overflow-hidden touch-manipulation",
+          "absolute bottom-4 z-50 transition-all duration-500 transform active:scale-[0.97] flex items-center justify-center overflow-hidden touch-manipulation",
           isActive
-            ? "right-4 w-14 h-14 rounded-full bg-white border-2 border-[#1873CC]"
-            : "left-4 right-4 h-14 rounded-2xl bg-[#1873CC] text-white"
+            ? "right-4 w-16 h-16 rounded-full bg-white border-2 border-[#1873CC] shadow-xl"
+            : "left-4 right-4 h-16 rounded-2xl shadow-[0_4px_24px_rgba(24,115,204,0.5)]"
         )}
+        style={!isActive ? {
+          background: "linear-gradient(135deg, #1873CC 0%, #2196F3 60%, #42A5F5 100%)",
+        } : {}}
       >
         {isActive ? (
           <div className="flex items-center gap-[3px] h-6">
@@ -141,9 +143,18 @@ export function VoiceAssistant() {
             ))}
           </div>
         ) : (
-          <div className="flex items-center justify-center gap-3">
-            <Mic className="w-6 h-6 text-white" />
-            <span className="text-xl font-bold italic">TnG Suara</span>
+          <div className="flex items-center justify-center gap-3 px-2">
+            {/* Mic with pulse ring */}
+            <div className="relative flex items-center justify-center">
+              <span className="absolute w-10 h-10 rounded-full bg-white/20 animate-ping" />
+              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
+                <Mic className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-white/70 text-[10px] font-medium tracking-widest uppercase leading-none">Touch &apos;n Go</span>
+              <span className="text-white text-xl font-extrabold italic leading-tight tracking-tight">Suara</span>
+            </div>
           </div>
         )}
       </button>
