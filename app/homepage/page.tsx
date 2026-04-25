@@ -12,14 +12,14 @@ export default function App() {
   return (
     <div className="min-h-screen h-screen bg-[#F3F4F6] flex flex-col overflow-hidden w-full">
       {/* Status Bar Simulation */}
-      <div className="bg-[#1873CC] px-3 pt-2 pb-1.5 flex items-center justify-between text-white text-[10px]">
+      {/* <div className="bg-[#1873CC] px-3 pt-2 pb-1.5 flex items-center justify-between text-white text-[10px]">
         <span>20:02</span>
         <div className="flex gap-1 items-center">
           <span>4G+</span>
           <span>📶</span>
           <span>🔋 91</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Header */}
       <div className="bg-[#1873CC] px-3 pt-2 pb-4">
