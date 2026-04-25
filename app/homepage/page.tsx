@@ -3,23 +3,16 @@
 import { ArrowLeftRight, Scan, History, ChevronRight, Eye, Search, Bell, User, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from '../context/LanguageContext';
 
 export default function App() {
   const router = useRouter();
   const [balance] = useState(251.82);
   const [spending] = useState(450.75);
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen h-screen bg-[#F3F4F6] flex flex-col overflow-hidden w-full">
-      {/* Status Bar Simulation */}
-      {/* <div className="bg-[#1873CC] px-3 pt-2 pb-1.5 flex items-center justify-between text-white text-[10px]">
-        <span>20:02</span>
-        <div className="flex gap-1 items-center">
-          <span>4G+</span>
-          <span>📶</span>
-          <span>🔋 91</span>
-        </div>
-      </div> */}
 
       {/* Header */}
       <div className="bg-[#1873CC] px-3 pt-2 pb-4">
@@ -55,7 +48,7 @@ export default function App() {
             <Eye className="w-5 h-5 text-white" />
           </div>
           <button className="text-white/90 text-xs flex items-center gap-0.5">
-            View balance details
+            {t.viewBalanceDetails}
             <ChevronRight className="w-3 h-3" />
           </button>
         </div>
@@ -63,13 +56,13 @@ export default function App() {
         {/* Action Buttons */}
         <div className="flex gap-2 items-center">
           <button className="border-2 border-white rounded-full px-4 py-1.5 text-white font-semibold text-xs flex items-center gap-1">
-            + Add money
+            {t.addMoney}
           </button>
           <button
             onClick={() => router.push("/homepage/history")}
             className="text-white font-semibold text-xs flex items-center gap-0.5"
           >
-            Transactions
+            {t.transactions}
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div >
@@ -85,7 +78,7 @@ export default function App() {
               className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
             >
               <ArrowLeftRight className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
-              <span className="text-[11px] text-gray-800">Transfer</span>
+              <span className="text-[11px] text-gray-800">{t.transfer}</span>
             </button>
 
             <button
@@ -93,7 +86,7 @@ export default function App() {
               className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
             >
               <Scan className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
-              <span className="text-[11px] text-gray-800">Scan</span>
+              <span className="text-[11px] text-gray-800">{t.scan}</span>
             </button>
 
             <button
@@ -101,23 +94,23 @@ export default function App() {
               className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
             >
               <History className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
-              <span className="text-[11px] text-gray-800">History</span>
+              <span className="text-[11px] text-gray-800">{t.history}</span>
             </button>
           </div >
         </div >
 
         {/* See More Button */}
         < button onClick={() => router.push("/MoreServices")} className="w-full bg-white rounded-xl p-2.5 flex items-center justify-center gap-1.5 mb-3 shadow-sm active:opacity-70" >
-          <span className="text-[#1873CC] font-semibold text-xs">See More</span>
+          <span className="text-[#1873CC] font-semibold text-xs">{t.seeMore}</span>
           <ChevronRight className="w-3.5 h-3.5 text-[#1873CC]" />
         </button >
 
         {/* Summary Section */}
         < div className="bg-white rounded-xl p-3 shadow-sm mb-3" >
-          <h3 className="text-gray-800 font-semibold text-sm mb-2">Summary</h3>
-          <p className="text-gray-500 text-[10px] mb-0.5">You spent</p>
+          <h3 className="text-gray-800 font-semibold text-sm mb-2">{t.summary}</h3>
+          <p className="text-gray-500 text-[10px] mb-0.5">{t.youSpent}</p>
           <p className="text-gray-900 font-bold text-2xl mb-0.5">RM {spending.toFixed(2)}</p>
-          <p className="text-gray-400 text-[10px]">This month</p>
+          <p className="text-gray-400 text-[10px]">{t.thisMonth}</p>
         </div >
       </div >
     </div >
