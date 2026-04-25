@@ -42,7 +42,7 @@ export function VoiceAssistant() {
         setFeedback(`Error: ${result.error}`)
       } else if (result.data) {
         const { type, recipient, amount, reasoning } = result.data
-        
+
         if (type === "transaction" && recipient && amount) {
           startGuide(recipient.toString(), amount.toString())
           setFeedback(`Guiding: Transfer RM${amount} to ${recipient}`)
