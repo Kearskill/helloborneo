@@ -196,9 +196,9 @@ export default function App() {
                   <button
                     key={lang.value}
                     onClick={() => setLanguage(lang.value)}
-                    className={`w-full flex items-center gap-4 px-4 py-4 bg-white border-b-2 transition-colors ${
+                    className={`w-full flex items-center gap-4 px-4 py-4 bg-white border-b transition-colors ${
                       language === lang.value
-                        ? 'border-b-[#1873CC]'
+                        ? 'border-b-gray-100'
                         : 'border-b-gray-100'
                     }`}
                   >
