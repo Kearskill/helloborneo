@@ -1,8 +1,10 @@
 "use client"
 import { ArrowLeftRight, Scan, History, Mic, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function App() {
+  const router = useRouter();
   const [balance] = useState(125.50);
   const [spending] = useState(450.75);
 
@@ -31,7 +33,9 @@ export default function App() {
       {/* Main Actions */}
       <div className="px-6 mb-6 flex-1">
         <div className="grid grid-cols-3 gap-3 mb-3">
-          <button className="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-md active:scale-[0.98] transition-transform">
+          <button
+            onClick={() => router.push("/TransactionPage")}
+            className="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-md active:scale-[0.98] transition-transform">
             <div className="bg-[#0066CC] rounded-full p-3">
               <ArrowLeftRight className="w-6 h-6 text-white" />
             </div>
