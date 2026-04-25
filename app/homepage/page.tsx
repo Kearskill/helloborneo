@@ -81,6 +81,7 @@ export default function App() {
         < div className="bg-white rounded-xl p-3 mb-3 shadow-sm" >
           <div className="grid grid-cols-3 gap-3">
             <button
+              onClick={() => router.push("/TransactionPage")}
               className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
             >
               <ArrowLeftRight className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
