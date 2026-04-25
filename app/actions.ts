@@ -1,3 +1,4 @@
+
 "use server"
 
 export async function processAiQuery(query: string) {
@@ -50,8 +51,8 @@ procedural_memory:
       body: JSON.stringify({
         model: "qwen-plus",
         messages: [
-          { 
-            role: "system", 
+          {
+            role: "system",
             content: `You are a linguistic and intent analyzer for the Touch 'n Go eWallet app.
             
 Use the following Procedural Memory (YAML) to classify the user's input:
@@ -73,7 +74,7 @@ Respond ONLY with a valid JSON object:
 Notes:
 - For 'transaction' type, try to extract 'recipient' (name or phone number) and 'amount'.
 - If 'amount' or 'recipient' are not mentioned, set them to null.
-- For non-transaction types, 'recipient' and 'amount' should be null.` 
+- For non-transaction types, 'recipient' and 'amount' should be null.`
           },
           { role: "user", content: query },
         ],
@@ -103,4 +104,3 @@ Notes:
     return { error: "Failed to connect to AI service. Check your internet or endpoint URL." };
   }
 }
-
