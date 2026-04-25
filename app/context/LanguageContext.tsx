@@ -1,111 +1,103 @@
-// app/context/LanguageContext.tsx
 "use client"
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useRef, useCallback, useMemo, useEffect } from 'react';
 import { translations, Language } from '../translations';
 
 type LanguageContextType = {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: typeof translations['english']; // Type-safe translations
+  t: typeof translations['english'];
   speakText: (text: string, lang?: Language) => Promise<void>;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Language-specific greeting phrases
 const LANGUAGE_GREETINGS: Record<Language, string> = {
   english: 'getting started',
-  malay: 'selamat dating',
+  malay: 'selamat datang',
   iban: 'getting started',
-  kadazan: 'getting started',
   dusun: 'getting started',
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>('english');
+  
+  // Ref to track the currently playing audio
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioUrlRef = useRef<string | null>(null);
 
-  const speakWithPolly = async (text: string, lang: Language) => {
-    const response = await fetch('/api/polly', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, language: lang }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to synthesize speech');
+  // Helper to stop and cleanup current audio
+  const stopAndCleanup = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
-
-    const audioBlob = await response.blob();
-    const audioUrl = URL.createObjectURL(audioBlob);
-    const audio = new Audio(audioUrl);
-    
-    console.log('Playing Polly audio...');
-    await audio.play();
-    
-    audio.onended = () => URL.revokeObjectURL(audioUrl);
-  };
-
-  const speakWithRecordedAudio = async (phrase: string, lang: Language) => {
-    const response = await fetch('/api/audio', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ language: lang, phrase }),
-    });
-
-    if (!response.ok) {
-      console.error('Recorded audio not found, falling back to Polly');
-      return speakWithPolly(`${lang} ${phrase}`, lang);
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = null;
     }
+  }, []);
 
-    const audioBlob = await response.blob();
-    const audioUrl = URL.createObjectURL(audioBlob);
-    const audio = new Audio(audioUrl);
-    
-    console.log('Playing recorded audio from S3...');
-    await audio.play();
-    
-    audio.onended = () => URL.revokeObjectURL(audioUrl);
-  };
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => stopAndCleanup();
+  }, [stopAndCleanup]);
 
-  const speakText = async (text: string, lang?: Language) => {
+  const speakText = useCallback(async (text: string, lang?: Language) => {
     try {
-      // Use passed language or current state
+      stopAndCleanup(); // Stop whatever is currently playing
+
       const currentLang = lang || language;
-      console.log('Speaking:', { text, language: currentLang });
-      
-      // Map Dusun to Kadazan audio
       const audioLanguage = currentLang === 'dusun' ? 'kadazan' : currentLang;
       
-      // For Iban and Kadazan (including Dusun), use recorded audio from S3
-      if (audioLanguage === 'iban' || audioLanguage === 'kadazan') {
-        await speakWithRecordedAudio(text, audioLanguage);
-      } else {
-        // Use Polly for other languages
-        await speakWithPolly(text, currentLang);
-      }
-    } catch (error) {
-      console.error('Speech synthesis error:', error);
-    }
-  };
+      const isRecorded = audioLanguage === 'iban' || audioLanguage === 'kadazan';
+      const endpoint = isRecorded ? '/api/audio' : '/api/polly';
+      const payload = isRecorded 
+        ? { language: audioLanguage, phrase: text } 
+        : { text, language: currentLang };
 
-  const handleSetLanguage = (lang: Language) => {
-    console.log('Language changed to:', lang);
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error('Speech synthesis failed');
+
+      const audioBlob = await response.blob();
+      const url = URL.createObjectURL(audioBlob);
+      
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audioUrlRef.current = url;
+
+      audio.onended = () => {
+        if (audioUrlRef.current === url) {
+          URL.revokeObjectURL(url);
+          audioUrlRef.current = null;
+        }
+      };
+
+      await audio.play();
+    } catch (error) {
+      console.error('Speech error:', error);
+    }
+  }, [language, stopAndCleanup]);
+
+  const handleSetLanguage = useCallback((lang: Language) => {
     setLanguage(lang);
-    
-    // Speak greeting when language changes - pass lang explicitly
     const greeting = LANGUAGE_GREETINGS[lang];
-    console.log('Speaking greeting:', greeting, 'for language:', lang);
     if (greeting) {
       speakText(greeting, lang);
     }
-  };
+  }, [speakText]);
 
-  const value = {
+  // Memoize the context value to prevent unnecessary consumer re-renders
+  const value = useMemo(() => ({
     language,
     setLanguage: handleSetLanguage,
     t: translations[language],
     speakText,
-  };
+  }), [language, handleSetLanguage, speakText]);
 
   return (
     <LanguageContext.Provider value={value}>

@@ -99,7 +99,7 @@ export default function App() {
 
     if (field === 'done') {
       // Play audio for done/confirm
-      if (lang === 'iban' || lang === 'kadazan' || lang === 'dusun') {
+      if (lang === 'iban'  || lang === 'dusun') {
         speakText('confirm', lang);
       }
       speakTimer.current = setTimeout(() => setIsSpeaking(false), 2500);
@@ -119,7 +119,7 @@ export default function App() {
     setActiveField(field);
     
     // Play audio when field is focused
-    if (language === 'iban' || language === 'kadazan' || language === 'dusun') {
+    if (language === 'iban'  || language === 'dusun') {
       const audioMap: Record<FieldKey, string> = {
         name: 'full name',
         phone: 'phone',
