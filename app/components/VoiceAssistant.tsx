@@ -43,10 +43,9 @@ export function VoiceAssistant() {
         if (result.error) {
           console.error("AI Error:", result.error)
         } else {
-          console.log("AI Response:", result.text)
+          console.log("AI Intent Classification:", result.data || result.text)
         }
-      } catch (err) {
-        console.error("Failed to process AI query:", err)
+      } catch (err) {        console.error("Failed to process AI query:", err)
       } finally {
         setIsProcessing(false)
       }
