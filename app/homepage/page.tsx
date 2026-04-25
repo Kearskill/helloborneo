@@ -4,12 +4,16 @@ import { ArrowLeftRight, Scan, History, ChevronRight, Eye, Search, Bell, User, C
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from '../context/LanguageContext';
+import { useGuide } from "@/app/context/GuideContext";
 
 export default function App() {
   const router = useRouter();
+  const { guide, advanceGuide } = useGuide();
   const [balance] = useState(251.82);
   const [spending] = useState(450.75);
   const { t } = useLanguage();
+
+  const pulseTransfer = guide.active && guide.step === "press-transfer";
 
   return (
     <div className="min-h-screen h-screen bg-[#F3F4F6] flex flex-col overflow-hidden w-full">
@@ -74,8 +78,10 @@ export default function App() {
         <div className="bg-white rounded-xl p-3 mb-3 shadow-sm">
           <div className="grid grid-cols-3 gap-3">
             <button
-              onClick={() => router.push("/TransactionPage")}
-              className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
+              onClick={() => { advanceGuide(); router.push("/TransactionPage"); }}
+              className={`flex flex-col items-center gap-1.5 active:opacity-70 py-1 rounded-xl transition-all duration-300 ${
+                pulseTransfer ? "ring-2 ring-[#1873CC] ring-offset-2 animate-pulse bg-blue-50" : ""
+              }`}
             >
               <ArrowLeftRight className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
               <span className="text-[11px] text-gray-800">{t.transfer}</span>

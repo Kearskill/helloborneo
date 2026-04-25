@@ -1,8 +1,9 @@
 "use client"
 import { ArrowLeft, User, ShieldCheck, Info } from "lucide-react";
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLanguage } from '../context/LanguageContext';
+import { useGuide } from "@/app/context/GuideContext";
 
 function TransferMoneyContent() {
   const { t } = useLanguage(); // Called inside the component
@@ -12,12 +13,21 @@ function TransferMoneyContent() {
   const name = params.get("name") ?? "Unknown";
   const phone = params.get("phone") ?? "";
 
+  const { guide, advanceGuide } = useGuide();
   const balance = 125.50;
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState(t.fundTransfer || "Fund Transfer");
 
+  // Pre-fill amount from guide
+  useEffect(() => {
+    if (guide.active && guide.step === "enter-amount" && guide.amount) {
+      setAmount(guide.amount);
+    }
+  }, [guide.active, guide.step, guide.amount]);
+
   const numericAmount = parseFloat(amount) || 0;
   const isValid = numericAmount > 0 && numericAmount <= balance;
+  const pulseNext = guide.active && guide.step === "enter-amount" && isValid;
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Allow only numbers and a single decimal point
@@ -109,13 +119,18 @@ function TransferMoneyContent() {
       <div className="px-4 pb-24 pt-3">
         <button
           disabled={!isValid}
-          onClick={() =>
+          onClick={() => {
+            if (guide.active) advanceGuide();
             router.push(
               `/TransferSuccess?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&amount=${encodeURIComponent(amount)}&note=${encodeURIComponent(note)}`
-            )
-          }
-          className={`w-full py-4 rounded-2xl text-white font-bold text-base transition-opacity ${
-            isValid ? "bg-[#0066CC] active:opacity-80" : "bg-[#0066CC]/40 cursor-not-allowed"
+            );
+          }}
+          className={`w-full py-4 rounded-2xl text-white font-bold text-base transition-all ${
+            pulseNext
+              ? "bg-[#0066CC] ring-4 ring-[#0066CC]/40 animate-pulse"
+              : isValid
+              ? "bg-[#0066CC] active:opacity-80"
+              : "bg-[#0066CC]/40 cursor-not-allowed"
           }`}
         >
           Next

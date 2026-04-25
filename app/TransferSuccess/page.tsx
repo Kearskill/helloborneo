@@ -3,10 +3,12 @@ import { CheckCircle } from "lucide-react";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLanguage } from '../context/LanguageContext';
+import { useGuide } from "@/app/context/GuideContext";
 
 function TransferSuccessContent() {
   const router = useRouter();
   const params = useSearchParams();
+  const { clearGuide } = useGuide();
 
   const { t } = useLanguage(); // Called inside the component
 
@@ -16,6 +18,8 @@ function TransferSuccessContent() {
   const note = params.get("note") ?? "Fund Transfer";
 
   const [ref, setRef] = useState("");
+
+  useEffect(() => { clearGuide(); }, [clearGuide]);
   const [dateStr, setDateStr] = useState("");
   const [timeStr, setTimeStr] = useState("");
 
