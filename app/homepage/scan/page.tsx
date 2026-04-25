@@ -39,7 +39,7 @@ export default function ScanPage() {
       </div>
 
       {/* Bottom Controls */}
-      <div className="bg-black/80 backdrop-blur-xl p-8 flex justify-around items-center border-t border-white/10">
+      <div className="bg-black/80 backdrop-blur-xl p-8 pb-24 flex justify-around items-center border-t border-white/10">
         <button className="flex flex-col items-center gap-2">
           <div className="bg-white/10 p-4 rounded-full text-white">
             <ImageIcon className="w-6 h-6" />

@@ -1,6 +1,6 @@
 "use client"
 import { CheckCircle } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 function TransferSuccessContent() {
@@ -12,19 +12,24 @@ function TransferSuccessContent() {
   const amount = params.get("amount") ?? "0.00";
   const note = params.get("note") ?? "Fund Transfer";
 
-  // Generate a simple reference number
-  const ref = "TNG" + Date.now().toString().slice(-8);
+  const [ref, setRef] = useState("");
+  const [dateStr, setDateStr] = useState("");
+  const [timeStr, setTimeStr] = useState("");
 
-  const now = new Date();
-  const dateStr = now.toLocaleDateString("en-MY", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-  const timeStr = now.toLocaleTimeString("en-MY", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  useEffect(() => {
+    setRef("TNG" + Date.now().toString().slice(-8));
+    
+    const now = new Date();
+    setDateStr(now.toLocaleDateString("en-MY", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }));
+    setTimeStr(now.toLocaleTimeString("en-MY", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }));
+  }, []);
 
   return (
     <div className="size-full flex flex-col bg-white">
@@ -74,7 +79,7 @@ function TransferSuccessContent() {
       <div className="flex-1" />
 
       {/* Back to home button */}
-      <div className="px-5 pb-10 pt-4">
+      <div className="px-5 pb-24 pt-4">
         <button
           onClick={() => router.push("/homepage")}
           className="w-full py-4 bg-[#0066CC] text-white font-bold text-base rounded-2xl active:opacity-80 transition-opacity"

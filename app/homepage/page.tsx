@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeftRight, Scan, History, Mic, ChevronRight, Eye, Search, Bell, User, ChevronDown } from "lucide-react";
+import { ArrowLeftRight, Scan, History, ChevronRight, Eye, Search, Bell, User, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -76,9 +76,9 @@ export default function App() {
       </div >
 
       {/* Main Content */}
-      < div className="flex-1 px-3 -mt-3 overflow-y-auto" >
+      <div className="flex-1 px-3 -mt-3 overflow-y-auto pb-24">
         {/* Main Actions Card */}
-        < div className="bg-white rounded-xl p-3 mb-3 shadow-sm" >
+        <div className="bg-white rounded-xl p-3 mb-3 shadow-sm">
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => router.push("/TransactionPage")}
@@ -119,14 +119,6 @@ export default function App() {
           <p className="text-gray-900 font-bold text-2xl mb-0.5">RM {spending.toFixed(2)}</p>
           <p className="text-gray-400 text-[10px]">This month</p>
         </div >
-      </div >
-
-      {/* Voice Assistant Button - Fixed at Bottom */}
-      < div className="px-3 pb-4 pt-2 bg-[#F3F4F6] shrink-0" >
-        <button className="w-full bg-[#1873CC] rounded-xl py-3 flex items-center justify-center gap-2.5 shadow-lg active:bg-[#1461A8]">
-          <Mic className="w-5 h-5 text-white" />
-          <span className="text-lg font-bold text-white">TnG Suara</span>
-        </button>
       </div >
     </div >
   );
