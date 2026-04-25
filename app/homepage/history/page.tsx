@@ -89,7 +89,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Transaction List */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto pb-24">
         <div className="bg-white mt-2">
           {transactions.map((tx, index) => (
             <div 

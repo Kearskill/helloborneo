@@ -104,7 +104,7 @@ function TransferMoneyContent() {
       </div>
 
       {/* Next button */}
-      <div className="px-4 pb-8 pt-3">
+      <div className="px-4 pb-24 pt-3">
         <button
           disabled={!isValid}
           onClick={() =>
