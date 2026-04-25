@@ -15,9 +15,15 @@ export function VoiceAssistant() {
     setVisualizerHeights([1, 2, 3, 4, 5].map(() => `${Math.random() * 100 + 20}%`))
   }, [])
 
+  // --- SMART VISIBILITY LOGIC ---
+  // 1. Never show on the root onboarding page.
   if (pathname === "/") return null
 
+  // 2. Check if we are currently on the homepage.
   const isHomepage = pathname === "/homepage"
+  
+  // 3. If we are NOT on the homepage, AND the assistant is NOT active, hide it.
+  // This means it will stay visible on other pages ONLY if the user is actively using it.
   if (!isHomepage && !isActive) return null
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -31,23 +37,17 @@ export function VoiceAssistant() {
 
   return (
     <>
-      {/* Screen Edge Glow
-        Added style={{ touchAction: 'none' }} to absolutely guarantee 
-        it cannot intercept swipes or taps on mobile screens.
-      */}
+      {/* Screen Edge Glow */}
       {isActive && (
         <div 
-          className="fixed inset-0 border-[4px] border-[#1873CC]/80 shadow-[inset_0_0_15px_rgba(24,115,204,0.4)] z-40 animate-pulse pointer-events-none"
+          className="absolute inset-0 border-[4px] border-[#1873CC]/80 shadow-[inset_0_0_15px_rgba(24,115,204,0.4)] z-40 animate-pulse pointer-events-none"
           style={{ touchAction: 'none' }} 
         />
       )}
 
-      {/* Text Box Pill (Only renders when active) 
-          Positioned independently to avoid invisible wrapper bugs.
-          right-24 gives exactly enough space for the mic button.
-      */}
+      {/* Text Box Pill */}
       {isActive && (
-        <div className="fixed bottom-6 left-4 right-24 z-50 animate-in slide-in-from-right-8 duration-300">
+        <div className="absolute bottom-6 left-4 right-24 z-50 animate-in slide-in-from-right-8 duration-300">
           <form 
             onSubmit={handleSubmit}
             className="w-full bg-white rounded-full shadow-2xl border border-gray-200 flex items-center h-14 relative pl-6 pr-14"
@@ -55,7 +55,6 @@ export function VoiceAssistant() {
             <input 
               type="text"
               placeholder="Ask TnG Suara..."
-              // Removed autoFocus so the mobile keyboard doesn't violently shift the layout
               className="w-full h-full bg-transparent border-none outline-none text-[#1873CC] placeholder-[#1873CC]/50 font-medium text-base"
               value={transcript}
               onChange={(e) => setTranscript(e.target.value)}
@@ -79,14 +78,11 @@ export function VoiceAssistant() {
         </div>
       )}
 
-      {/* The Toggle Button
-          Uses touch-manipulation to make mobile taps highly responsive.
-          Transitions between full-width (left-4 right-4) and small circle (right-4).
-      */}
+      {/* The Toggle Button */}
       <button
         onClick={() => setIsActive(!isActive)}
         className={cn(
-          "fixed bottom-6 z-50 shadow-2xl transition-all duration-500 transform active:scale-[0.98] flex items-center justify-center overflow-hidden touch-manipulation",
+          "absolute bottom-6 z-50 shadow-2xl transition-all duration-500 transform active:scale-[0.98] flex items-center justify-center overflow-hidden touch-manipulation",
           isActive 
             ? "right-4 w-14 h-14 rounded-full bg-white border-2 border-[#1873CC]" 
             : "left-4 right-4 h-14 rounded-2xl bg-[#1873CC] text-white"
