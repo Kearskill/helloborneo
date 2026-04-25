@@ -2,60 +2,63 @@
 
 import { ArrowLeft, Search, Filter, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-const transactions = [
-  {
-    id: 1,
-    title: "Family Mart - Mid Valley",
-    date: "24 Apr 2026, 12:45 PM",
-    amount: -15.50,
-    type: "payment",
-    category: "Food & Beverage"
-  },
-  {
-    id: 2,
-    title: "Reload - Online Banking",
-    date: "23 Apr 2026, 10:20 AM",
-    amount: 100.00,
-    type: "deposit",
-    category: "Reload"
-  },
-  {
-    id: 3,
-    title: "Grab - Riding",
-    date: "22 Apr 2026, 06:15 PM",
-    amount: -12.00,
-    type: "payment",
-    category: "Transport"
-  },
-  {
-    id: 4,
-    title: "Shell - Petrol",
-    date: "21 Apr 2026, 08:30 AM",
-    amount: -50.00,
-    type: "payment",
-    category: "Transport"
-  },
-  {
-    id: 5,
-    title: "Transfer from John Doe",
-    date: "20 Apr 2026, 02:00 PM",
-    amount: 25.00,
-    type: "deposit",
-    category: "Transfer"
-  },
-  {
-    id: 6,
-    title: "Starbucks Coffee",
-    date: "19 Apr 2026, 03:45 PM",
-    amount: -18.90,
-    type: "payment",
-    category: "Food & Beverage"
-  }
-];
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function HistoryPage() {
   const router = useRouter();
+  const { t } = useLanguage();
+
+  // Define transactions INSIDE the component to access 't'
+  const transactions = [
+    {
+      id: 1,
+      title: "Family Mart - Mid Valley",
+      date: "24 Apr 2026, 12:45 PM",
+      amount: -15.50,
+      type: "payment",
+      category: t.foodNBeverage || "Food & Beverage"
+    },
+    {
+      id: 2,
+      title: t.reloadOnlineBanking || "Reload - Online Banking",
+      date: "23 Apr 2026, 10:20 AM",
+      amount: 100.00,
+      type: "deposit",
+      category:  "Reload"
+    },
+    {
+      id: 3,
+      title: t.grabRiding || "Grab - Riding",
+      date: "22 Apr 2026, 06:15 PM",
+      amount: -12.00,
+      type: "payment",
+      category: "Transport"
+    },
+    {
+      id: 4,
+      title: t.shellPetrol || "Shell - Petrol",
+      date: "21 Apr 2026, 08:30 AM",
+      amount: -50.00,
+      type: "payment",
+      category: "Transport"
+    },
+    {
+      id: 5,
+      title: t.transferFromJohnDoe || "Transfer from John Doe",
+      date: "20 Apr 2026, 02:00 PM",
+      amount: 25.00,
+      type: "deposit",
+      category: t.transfer || "Transfer"
+    },
+    {
+      id: 6,
+      title: "Starbucks Coffee",
+      date: "19 Apr 2026, 03:45 PM",
+      amount: -18.90,
+      type: "payment",
+      category: t.foodNBeverage || "Food & Beverage"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-[#F3F4F6] flex flex-col w-full">
@@ -67,7 +70,7 @@ export default function HistoryPage() {
         >
           <ArrowLeft className="w-6 h-6" />
         </button>
-        <h1 className="text-white text-xl font-semibold">Transaction History</h1>
+        <h1 className="text-white text-xl font-semibold">{t.transactionHistory}</h1>
       </div>
 
       {/* Search and Filter Bar */}
@@ -76,7 +79,7 @@ export default function HistoryPage() {
           <Search className="w-4 h-4 text-gray-400" />
           <input 
             type="text" 
-            placeholder="Search transactions" 
+            placeholder={t.searchTransaction || "Search transactions"} 
             className="bg-transparent text-sm outline-none w-full"
           />
         </div>
@@ -122,7 +125,7 @@ export default function HistoryPage() {
         </div>
         
         <div className="p-8 text-center">
-          <p className="text-gray-400 text-sm">Showing last 30 days of transactions</p>
+          <p className="text-gray-400 text-sm">{t.showingLast30DaysOfTransactions}</p>
         </div>
       </div>
     </div>

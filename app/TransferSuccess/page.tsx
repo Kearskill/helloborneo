@@ -2,12 +2,15 @@
 import { CheckCircle } from "lucide-react";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useLanguage } from '../context/LanguageContext';
 import { useGuide } from "@/app/context/GuideContext";
 
 function TransferSuccessContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { clearGuide } = useGuide();
+
+  const { t } = useLanguage(); // Called inside the component
 
   const name = params.get("name") ?? "Unknown";
   const phone = params.get("phone") ?? "";
@@ -43,7 +46,7 @@ function TransferSuccessContent() {
         <div className="bg-white rounded-full p-3 mb-4 shadow-lg">
           <CheckCircle className="w-14 h-14 text-[#0066CC]" strokeWidth={1.5} />
         </div>
-        <p className="text-white/80 text-sm font-medium">Transfer Successful</p>
+        <p className="text-white/80 text-sm font-medium">{t.transferSuccessful || "Transfer Successful"}</p>
         <p className="text-white text-5xl font-bold mt-2">
           RM {parseFloat(amount).toFixed(2)}
         </p>
@@ -53,7 +56,7 @@ function TransferSuccessContent() {
       <div className="mx-5 -mt-5 bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
         {/* Recipient row */}
         <div className="px-5 py-4 border-b border-gray-100">
-          <p className="text-gray-400 text-xs mb-1">Transferred to</p>
+          <p className="text-gray-400 text-xs mb-1">{t.transferTo || "Transferred to"}</p>
           <p className="text-gray-900 font-bold text-base uppercase">{name}</p>
           <p className="text-gray-500 text-sm">{phone}</p>
         </div>
@@ -61,19 +64,19 @@ function TransferSuccessContent() {
         {/* Details grid */}
         <div className="px-5 py-4 space-y-3">
           <div className="flex justify-between">
-            <p className="text-gray-400 text-sm">Date</p>
+            <p className="text-gray-400 text-sm">{t.date || "Date"}</p>
             <p className="text-gray-800 text-sm font-medium">{dateStr}</p>
           </div>
           <div className="flex justify-between">
-            <p className="text-gray-400 text-sm">Time</p>
+            <p className="text-gray-400 text-sm">{t.time || "Time"}</p>
             <p className="text-gray-800 text-sm font-medium">{timeStr}</p>
           </div>
           <div className="flex justify-between">
-            <p className="text-gray-400 text-sm">Note</p>
+            <p className="text-gray-400 text-sm">{t.note || "Note"}</p>
             <p className="text-gray-800 text-sm font-medium">{note}</p>
           </div>
           <div className="flex justify-between">
-            <p className="text-gray-400 text-sm">Reference</p>
+            <p className="text-gray-400 text-sm">{t.reference || "Reference"}</p>
             <p className="text-gray-800 text-sm font-medium">{ref}</p>
           </div>
         </div>
@@ -88,7 +91,7 @@ function TransferSuccessContent() {
           onClick={() => router.push("/homepage")}
           className="w-full py-4 bg-[#0066CC] text-white font-bold text-base rounded-2xl active:opacity-80 transition-opacity"
         >
-          Back to Home
+          {t.backToHome || "Back to Home"}
         </button>
       </div>
     </div>

@@ -4,26 +4,29 @@ import {
   ArrowLeft, FileText, Smartphone, Radio, ShoppingCart, ParkingCircle,
   Gift, Tag, TrendingUp, Shield, Banknote, ClipboardList, Briefcase, KeyRound, AlertTriangle
 } from "lucide-react";
-
-const SERVICES = [
-  { label: "Pay Bills", icon: FileText },
-  { label: "Mobile Reload / Top-up", icon: Smartphone },
-  { label: "Toll Payment", icon: Radio },
-  { label: "Online Payments", icon: ShoppingCart },
-  { label: "Parking Payment", icon: ParkingCircle },
-  { label: "Cashback & Rewards", icon: Gift },
-  { label: "Vouchers / Deals", icon: Tag },
-  { label: "GO+ Investment", icon: TrendingUp },
-  { label: "Insurance (GOprotect)", icon: Shield },
-  { label: "Loans / Financing", icon: Banknote },
-  { label: "Sales Tracking", icon: ClipboardList },
-  { label: "Business Tools", icon: Briefcase },
-  { label: "PIN Security", icon: KeyRound },
-  { label: "Fraud Protection", icon: AlertTriangle },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function MoreServicesPage() {
   const router = useRouter();
+  const { t } = useLanguage(); // Called inside the component
+
+  // Define the array inside the component so it has access to 't'
+  const SERVICES = [
+    { label: t.payBills, icon: FileText },
+    { label: t.mobileReload, icon: Smartphone },
+    { label: t.tollPayment, icon: Radio },
+    { label: t.onlinePayments, icon: ShoppingCart },
+    { label: t.parkingPayment, icon: ParkingCircle },
+    { label: t.cashbackNRewards, icon: Gift },
+    { label: t.vouchersNDeals, icon: Tag },
+    { label: t.GOInvestment, icon: TrendingUp },
+    { label: t.insuranceGoProtect, icon: Shield },
+    { label: t.loansFinancing, icon: Banknote },
+    { label: t.salesTracking, icon: ClipboardList },
+    { label: t.businessTools, icon: Briefcase },
+    { label: t.pinSecurity, icon: KeyRound },
+    { label: t.fraudProtection, icon: AlertTriangle },
+  ];
 
   return (
     <div className="size-full flex flex-col bg-white">
@@ -33,7 +36,8 @@ export default function MoreServicesPage() {
           <button onClick={() => router.back()} className="text-white p-1">
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-white text-xl font-bold">More Services</h1>
+          {/* Use localized title if available, or stay as 'More Services' */}
+          <h1 className="text-white text-xl font-bold">{t.moreServices || "More Services"}</h1>
         </div>
       </div>
 
