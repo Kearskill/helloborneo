@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PollyClient, SynthesizeSpeechCommand } from '@aws-sdk/client-polly';
+import { PollyClient, SynthesizeSpeechCommand, VoiceId } from '@aws-sdk/client-polly';
 
 const polly = new PollyClient({
   region: process.env.AWS_REGION || 'ap-southeast-5',
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const command = new SynthesizeSpeechCommand({
       Text: text,
       OutputFormat: 'mp3',
-      VoiceId: voiceId,
+      VoiceId: process.env.POLLY_VOICE_ID_EN as VoiceId,
       Engine: 'neural',
       LexiconNames: lexiconNames,
     });
