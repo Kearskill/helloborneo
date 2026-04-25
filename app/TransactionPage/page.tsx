@@ -2,6 +2,7 @@
 import { ArrowLeft, User, RefreshCw, ChevronDown, Info } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useGuide } from "@/app/context/GuideContext";
 
 const CONTACTS = [
   { name: "Ali", phone: "+60 11-5123 4567" },
@@ -11,13 +12,19 @@ const CONTACTS = [
 
 export default function TransactionPage() {
   const router = useRouter();
+  const { guide, advanceGuide } = useGuide();
   const [search, setSearch] = useState("");
   const balance = 125.50;
 
+  // Auto-populate search from guide
+  const effectiveSearch = guide.active && guide.step === "select-contact" && !search
+    ? guide.contactName
+    : search;
+
   const filtered = CONTACTS.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.phone.includes(search)
+      c.name.toLowerCase().includes(effectiveSearch.toLowerCase()) ||
+      c.phone.includes(effectiveSearch)
   );
 
   return (
@@ -65,15 +72,23 @@ export default function TransactionPage() {
 
       {/* Contacts list */}
       <div className="flex-1 overflow-y-auto">
-        {filtered.map((contact, i) => (
+        {filtered.map((contact, i) => {
+          const isGuided = guide.active && guide.step === "select-contact" &&
+            contact.name.toLowerCase().includes(guide.contactName)
+          return (
           <button
             key={i}
-            onClick={() =>
+            onClick={() => {
+              if (isGuided) advanceGuide()
               router.push(
                 `/TransferMoney?name=${encodeURIComponent(contact.name)}&phone=${encodeURIComponent(contact.phone)}`
               )
-            }
-            className="w-full flex items-center gap-4 px-4 py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors border-b border-gray-100"
+            }}
+            className={`w-full flex items-center gap-4 px-4 py-3 transition-colors border-b border-gray-100 ${
+              isGuided
+                ? "bg-blue-50 ring-2 ring-inset ring-[#1873CC] animate-pulse"
+                : "hover:bg-gray-50 active:bg-gray-100"
+            }`}
           >
             {/* Avatar */}
             <div className="w-11 h-11 rounded-full bg-[#E8F0FB] flex items-center justify-center shrink-0">
@@ -86,7 +101,8 @@ export default function TransactionPage() {
               <p className="text-gray-500 text-xs mt-0.5">{contact.phone}</p>
             </div>
           </button>
-        ))}
+          )
+        })}
 
         {filtered.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">

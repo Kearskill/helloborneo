@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { VoiceAssistant } from "@/app/components/VoiceAssistant";
-import { Wifi, BatteryMedium, Signal } from "lucide-react"; 
+import { GuideProvider } from "@/app/context/GuideContext";
+import { Wifi, BatteryMedium, Signal } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,12 +51,13 @@ export default function RootLayout({
 
           {/* The Actual Screen / Scrollable Area */}
           <div className="flex-1 w-full h-full overflow-x-hidden overflow-y-auto relative sm:pt-14 sm:pb-8">
-            <main className="w-full min-h-full flex flex-col">
-              {children}
-            </main>
+            <GuideProvider>
+              <main className="w-full min-h-full flex flex-col">
+                {children}
+              </main>
+              <VoiceAssistant />
+            </GuideProvider>
           </div>
-          
-          <VoiceAssistant />
           
         </div>
       </body>
