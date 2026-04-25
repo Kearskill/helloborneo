@@ -2,8 +2,8 @@
 import { CheckCircle } from "lucide-react";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useLanguage } from '../context/LanguageContext';
 import { useGuide } from "@/app/context/GuideContext";
+import { useLanguage } from '../context/LanguageContext';
 
 function TransferSuccessContent() {
   const router = useRouter();
@@ -25,7 +25,7 @@ function TransferSuccessContent() {
 
   useEffect(() => {
     setRef("TNG" + Date.now().toString().slice(-8));
-    
+
     const now = new Date();
     setDateStr(now.toLocaleDateString("en-MY", {
       day: "2-digit",

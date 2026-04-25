@@ -34,18 +34,18 @@ export default function RootLayout({
         <LanguageProvider>
           {/* Container with 19.5:9 aspect ratio */}
           <div className="w-full max-w-[430px] aspect-[9/19.5] bg-white shadow-2xl relative flex flex-col overflow-hidden">
-            
-          {/* The Actual Screen / Scrollable Area */}
-          <div className="flex-1 w-full h-full overflow-x-hidden overflow-y-auto relative sm:pt-14 sm:pb-8">
-            <GuideProvider>
-              <main className="w-full min-h-full flex flex-col">
-                {children}
-              </main>
-              <VoiceAssistant />
-            </GuideProvider>
+
+            {/* The Actual Screen / Scrollable Area */}
+            <div className="flex-1 w-full h-full overflow-x-hidden overflow-y-auto relative sm:pt-14 sm:pb-8">
+              <GuideProvider>
+                <main className="w-full min-h-full flex flex-col">
+                  {children}
+                </main>
+                <VoiceAssistant />
+              </GuideProvider>
+            </div>
+
           </div>
-          
-        </div>
         </LanguageProvider>
       </body>
     </html>

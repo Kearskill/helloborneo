@@ -2,8 +2,8 @@
 import { ArrowLeft, User, ShieldCheck, Info } from "lucide-react";
 import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useLanguage } from '../context/LanguageContext';
 import { useGuide } from "@/app/context/GuideContext";
+import { useLanguage } from '../context/LanguageContext';
 
 function TransferMoneyContent() {
   const { t } = useLanguage(); // Called inside the component
@@ -17,6 +17,13 @@ function TransferMoneyContent() {
   const balance = 125.50;
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState(t.fundTransfer || "Fund Transfer");
+
+  // Pre-fill amount from guide
+  useEffect(() => {
+    if (guide.active && guide.step === "enter-amount" && guide.amount) {
+      setAmount(guide.amount);
+    }
+  }, [guide.active, guide.step, guide.amount]);
 
   // Pre-fill amount from guide
   useEffect(() => {
@@ -125,13 +132,12 @@ function TransferMoneyContent() {
               `/TransferSuccess?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&amount=${encodeURIComponent(amount)}&note=${encodeURIComponent(note)}`
             );
           }}
-          className={`w-full py-4 rounded-2xl text-white font-bold text-base transition-all ${
-            pulseNext
-              ? "bg-[#0066CC] ring-4 ring-[#0066CC]/40 animate-pulse"
-              : isValid
+          className={`w-full py-4 rounded-2xl text-white font-bold text-base transition-all ${pulseNext
+            ? "bg-[#0066CC] ring-4 ring-[#0066CC]/40 animate-pulse"
+            : isValid
               ? "bg-[#0066CC] active:opacity-80"
               : "bg-[#0066CC]/40 cursor-not-allowed"
-          }`}
+            }`}
         >
           Next
         </button>

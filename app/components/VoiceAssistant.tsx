@@ -1,32 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Mic, Send } from "lucide-react"
+import { Mic, Send, Loader2 } from "lucide-react"
 import { cn } from "@/app/components/ui/utils"
 import { usePathname } from "next/navigation"
 import { useGuide } from "@/app/context/GuideContext"
-
-// Parse "transfer to ali rm50" / "send ali 50" etc.
-function parseTransferCommand(text: string): { contactName: string; amount: string } | null {
-  const t = text.toLowerCase().trim()
-
-  // Patterns: "transfer to <name> rm<amount>", "send <name> <amount>", etc.
-  const patterns = [
-    /(?:transfer|send|pay)\s+(?:to\s+)?([a-z]+)\s+(?:rm\s*)?(\d+(?:\.\d{1,2})?)/,
-    /(?:rm\s*)?(\d+(?:\.\d{1,2})?)\s+(?:to\s+)?([a-z]+)/,
-  ]
-
-  for (const re of patterns) {
-    const m = t.match(re)
-    if (m) {
-      // figure out which group is name vs amount
-      const a = m[1], b = m[2]
-      if (isNaN(Number(a)) && !isNaN(Number(b))) return { contactName: a, amount: b }
-      if (!isNaN(Number(a)) && isNaN(Number(b))) return { contactName: b, amount: a }
-    }
-  }
-  return null
-}
+import { processAiQuery } from "@/app/actions"
 
 export function VoiceAssistant() {
   const pathname = usePathname()
@@ -35,6 +14,7 @@ export function VoiceAssistant() {
   const [visualizerHeights, setVisualizerHeights] = useState<string[]>([])
   const [transcript, setTranscript] = useState("")
   const [feedback, setFeedback] = useState("")
+  const [isProcessing, setIsProcessing] = useState(false)
 
   useEffect(() => {
     setVisualizerHeights([1, 2, 3, 4, 5].map(() => `${Math.random() * 100 + 20}%`))
@@ -42,20 +22,44 @@ export function VoiceAssistant() {
 
   if (pathname === "/") return null
   const isHomepage = pathname === "/homepage"
+
+  // If we are NOT on the homepage, AND the assistant is NOT active, hide it.
   if (!isHomepage && !isActive) return null
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const text = transcript.trim()
-    if (!text) return
+    const query = transcript.trim()
+    if (!query || isProcessing) return
 
-    const parsed = parseTransferCommand(text)
-    if (parsed) {
-      startGuide(parsed.contactName, parsed.amount)
-      setFeedback(`Guiding: Transfer RM${parsed.amount} to ${parsed.contactName}`)
-      setIsActive(false)
-    } else {
-      setFeedback("Try: \"transfer to Ali RM50\"")
+    setTranscript("")
+    setIsProcessing(true)
+
+    try {
+      const result = await processAiQuery(query)
+      console.log("Qwen AI Response:", result);
+
+      if (result.error) {
+        setFeedback(`Error: ${result.error}`)
+      } else if (result.data) {
+        const { type, recipient, amount, reasoning } = result.data
+
+
+        if (type === "transaction" && recipient && amount) {
+          startGuide(recipient.toString(), amount.toString())
+          setFeedback(`Guiding: Transfer RM${amount} to ${recipient}`)
+          setIsActive(false)
+        } else {
+          setFeedback(reasoning || "How else can I help you today?")
+        }
+      } else if (result.text) {
+        setFeedback(result.text)
+      }
+    } catch (err) {
+      console.error("Failed to process AI query:", err)
+      setFeedback("Sorry, I encountered an error. Please try again.")
+    } finally {
+      setIsProcessing(false)
+      setTimeout(() => setFeedback(""), 5000)
     }
     setTranscript("")
     setTimeout(() => setFeedback(""), 3000)
@@ -67,7 +71,7 @@ export function VoiceAssistant() {
       {isActive && (
         <div
           className="absolute inset-0 border-[4px] border-[#1873CC]/80 shadow-[inset_0_0_15px_rgba(24,115,204,0.4)] z-40 animate-pulse pointer-events-none"
-          style={{ touchAction: "none" }}
+          style={{ touchAction: 'none' }}
         />
       )}
 
@@ -93,18 +97,23 @@ export function VoiceAssistant() {
               onChange={(e) => setTranscript(e.target.value)}
               autoFocus
             />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center">
               <button
                 type="submit"
-                disabled={!transcript.trim()}
+                disabled={!transcript.trim() || isProcessing}
                 className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300",
-                  transcript.trim()
+                  "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 touch-manipulation",
+                  transcript.trim() && !isProcessing
                     ? "bg-[#1873CC] text-white shadow-md active:scale-95"
                     : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 )}
               >
-                <Send className="w-[18px] h-[18px] ml-0.5" />
+                {isProcessing ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Send className="w-[18px] h-[18px] ml-0.5" />
+                )}
               </button>
             </div>
           </form>

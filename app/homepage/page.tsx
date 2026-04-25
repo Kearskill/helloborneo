@@ -3,8 +3,8 @@
 import { ArrowLeftRight, Scan, History, ChevronRight, Eye, Search, Bell, User, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useLanguage } from '../context/LanguageContext';
 import { useGuide } from "@/app/context/GuideContext";
+import { useLanguage } from '../context/LanguageContext';
 
 export default function App() {
   const router = useRouter();
@@ -79,9 +79,8 @@ export default function App() {
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => { advanceGuide(); router.push("/TransactionPage"); }}
-              className={`flex flex-col items-center gap-1.5 active:opacity-70 py-1 rounded-xl transition-all duration-300 ${
-                pulseTransfer ? "ring-2 ring-[#1873CC] ring-offset-2 animate-pulse bg-blue-50" : ""
-              }`}
+              className={`flex flex-col items-center gap-1.5 active:opacity-70 py-1 rounded-xl transition-all duration-300 ${pulseTransfer ? "ring-2 ring-[#1873CC] ring-offset-2 animate-pulse bg-blue-50" : ""
+                }`}
             >
               <ArrowLeftRight className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
               <span className="text-[11px] text-gray-800">{t.transfer}</span>
