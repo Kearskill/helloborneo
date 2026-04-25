@@ -102,20 +102,21 @@ export default function TransactionPage() {
                 <p className="text-gray-500 text-xs mt-0.5">{contact.phone}</p>
               </div>
             </button>
-
           )
         })}
 
-        {filtered.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-            <User className="w-12 h-12 mb-3 opacity-30" />
-            <p className="text-sm">{t.noContactFound || "No contacts found"}</p>
-          </div>
-        )}
-      </div>
+        {
+          filtered.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+              <User className="w-12 h-12 mb-3 opacity-30" />
+              <p className="text-sm">{t.noContactFound || "No contacts found"}</p>
+            </div>
+          )
+        }
+      </div >
 
       {/* Bottom balance bar */}
-      <div className="px-4 py-3 pb-24 border-t border-gray-200 bg-white flex items-center justify-center gap-2">
+      < div className="px-4 py-3 pb-24 border-t border-gray-200 bg-white flex items-center justify-center gap-2" >
         <p className="text-gray-600 text-sm">
           {t.transferableEWalletBalance || "Transferable eWallet balance: "}{" "}
           <span className="font-semibold text-gray-800">RM {balance.toFixed(2)}</span>
@@ -123,7 +124,7 @@ export default function TransactionPage() {
         <button className="text-[#0066CC]">
           <Info className="w-4 h-4" />
         </button>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
