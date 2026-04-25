@@ -2,8 +2,10 @@
 
 import { ArrowLeftRight, Scan, History, Mic, ChevronRight, Eye, Search, Bell, User, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function App() {
+  const router = useRouter();
   const [balance] = useState(251.82);
   const [spending] = useState(450.75);
 
@@ -63,7 +65,10 @@ export default function App() {
           <button className="border-2 border-white rounded-full px-4 py-1.5 text-white font-semibold text-xs flex items-center gap-1">
             + Add money
           </button>
-          <button className="text-white font-semibold text-xs flex items-center gap-0.5">
+          <button
+            onClick={() => router.push("/homepage/history")}
+            className="text-white font-semibold text-xs flex items-center gap-0.5"
+          >
             Transactions
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
@@ -75,17 +80,25 @@ export default function App() {
         {/* Main Actions Card */}
         <div className="bg-white rounded-xl p-3 mb-3 shadow-sm">
           <div className="grid grid-cols-3 gap-3">
-            <button className="flex flex-col items-center gap-1.5 active:opacity-70 py-1">
+            <button
+              className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
+            >
               <ArrowLeftRight className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
               <span className="text-[11px] text-gray-800">Transfer</span>
             </button>
 
-            <button className="flex flex-col items-center gap-1.5 active:opacity-70 py-1">
+            <button
+              onClick={() => router.push("/homepage/scan")}
+              className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
+            >
               <Scan className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
               <span className="text-[11px] text-gray-800">Scan</span>
             </button>
 
-            <button className="flex flex-col items-center gap-1.5 active:opacity-70 py-1">
+            <button
+              onClick={() => router.push("/homepage/history")}
+              className="flex flex-col items-center gap-1.5 active:opacity-70 py-1"
+            >
               <History className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
               <span className="text-[11px] text-gray-800">History</span>
             </button>
