@@ -1,78 +1,117 @@
 "use client"
-import { ArrowLeftRight, Scan, History, Mic, ChevronRight } from "lucide-react";
+
+import { ArrowLeftRight, Scan, History, Mic, ChevronRight, Eye, Search, Bell, User, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 export default function App() {
-  const [balance] = useState(125.50);
+  const [balance] = useState(251.82);
   const [spending] = useState(450.75);
 
   return (
-    <div className="size-full bg-gradient-to-b from-[#0066CC] to-[#0052A3] flex flex-col">
+    <div className="min-h-screen h-screen bg-[#F3F4F6] flex flex-col max-w-md mx-auto overflow-hidden">
+      {/* Status Bar Simulation */}
+      <div className="bg-[#1873CC] px-3 pt-2 pb-1.5 flex items-center justify-between text-white text-[10px]">
+        <span>20:02</span>
+        <div className="flex gap-1 items-center">
+          <span>4G+</span>
+          <span>📶</span>
+          <span>🔋 91</span>
+        </div>
+      </div>
+
       {/* Header */}
-      <div className="px-6 pt-8 pb-6">
-        <h1 className="text-white text-3xl font-bold tracking-tight">Touch 'n Go</h1>
-        <p className="text-white/80 text-sm mt-1">eWallet</p>
-      </div>
+      <div className="bg-[#1873CC] px-3 pt-2 pb-4">
+        {/* Top Bar */}
+        <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-1 bg-white/20 rounded-full px-2 py-1">
+            <span className="text-sm">🇲🇾</span>
+            <span className="text-white text-[10px] font-medium">MY</span>
+            <ChevronDown className="w-2.5 h-2.5 text-white" />
+          </div>
+          <div className="flex-1 bg-white rounded-full px-3 py-1.5 flex items-center gap-2">
+            <Search className="w-3.5 h-3.5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Find products & services"
+              className="flex-1 text-xs text-gray-600 outline-none bg-transparent placeholder:text-gray-400"
+            />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center">
+              <Bell className="w-3.5 h-3.5 text-white" />
+            </div>
+            <div className="w-7 h-7 bg-yellow-400 rounded-full flex items-center justify-center">
+              <User className="w-3.5 h-3.5 text-gray-700" />
+            </div>
+          </div>
+        </div>
 
-      {/* Balance Card */}
-      <div className="mx-6 mb-6 bg-white rounded-2xl shadow-lg p-5">
-        <p className="text-gray-500 text-sm mb-1">Available Balance</p>
-        <p className="text-4xl font-bold text-[#0066CC] mb-4">RM {balance.toFixed(2)}</p>
-        <div className="flex gap-2">
-          <button className="flex-1 bg-[#0066CC] text-white px-4 py-2 rounded-lg text-sm font-medium">
-            Reload
+        {/* Balance */}
+        <div className="mb-2">
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-white text-3xl font-bold">RM {balance.toFixed(2)}</span>
+            <Eye className="w-5 h-5 text-white" />
+          </div>
+          <button className="text-white/90 text-xs flex items-center gap-0.5">
+            View balance details
+            <ChevronRight className="w-3 h-3" />
           </button>
-          <button className="flex-1 border-2 border-[#0066CC] text-[#0066CC] px-4 py-2 rounded-lg text-sm font-medium">
-            Pay
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 items-center">
+          <button className="border-2 border-white rounded-full px-4 py-1.5 text-white font-semibold text-xs flex items-center gap-1">
+            + Add money
+          </button>
+          <button className="text-white font-semibold text-xs flex items-center gap-0.5">
+            Transactions
+            <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Main Actions */}
-      <div className="px-6 mb-6 flex-1">
-        <div className="grid grid-cols-3 gap-3 mb-3">
-          <button className="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-md active:scale-[0.98] transition-transform">
-            <div className="bg-[#0066CC] rounded-full p-3">
-              <ArrowLeftRight className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-gray-800">Transfer</span>
-          </button>
+      {/* Main Content */}
+      <div className="flex-1 px-3 -mt-3 overflow-y-auto">
+        {/* Main Actions Card */}
+        <div className="bg-white rounded-xl p-3 mb-3 shadow-sm">
+          <div className="grid grid-cols-3 gap-3">
+            <button className="flex flex-col items-center gap-1.5 active:opacity-70 py-1">
+              <ArrowLeftRight className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
+              <span className="text-[11px] text-gray-800">Transfer</span>
+            </button>
 
-          <button className="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-md active:scale-[0.98] transition-transform">
-            <div className="bg-[#0066CC] rounded-full p-3">
-              <Scan className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-gray-800">Scan</span>
-          </button>
+            <button className="flex flex-col items-center gap-1.5 active:opacity-70 py-1">
+              <Scan className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
+              <span className="text-[11px] text-gray-800">Scan</span>
+            </button>
 
-          <button className="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 shadow-md active:scale-[0.98] transition-transform">
-            <div className="bg-[#0066CC] rounded-full p-3">
-              <History className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-gray-800">History</span>
-          </button>
+            <button className="flex flex-col items-center gap-1.5 active:opacity-70 py-1">
+              <History className="w-6 h-6 text-[#1873CC] stroke-[1.5]" />
+              <span className="text-[11px] text-gray-800">History</span>
+            </button>
+          </div>
         </div>
 
-        <button className="w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-center gap-2 border border-white/40 active:scale-[0.98] transition-transform">
-          <span className="text-white font-semibold">See More</span>
-          <ChevronRight className="w-5 h-5 text-white" />
+        {/* See More Button */}
+        <button className="w-full bg-white rounded-xl p-2.5 flex items-center justify-center gap-1.5 mb-3 shadow-sm active:opacity-70">
+          <span className="text-[#1873CC] font-semibold text-xs">See More</span>
+          <ChevronRight className="w-3.5 h-3.5 text-[#1873CC]" />
         </button>
 
         {/* Summary Section */}
-        <div className="mt-6 bg-white/20 backdrop-blur-sm rounded-2xl p-5 border border-white/30">
-          <h3 className="text-white font-semibold text-lg mb-2">Monthly Summary</h3>
-          <p className="text-white/90">You spent <span className="font-bold text-xl">RM {spending.toFixed(2)}</span></p>
-          <p className="text-white/70 text-sm mt-1">This month</p>
+        <div className="bg-white rounded-xl p-3 shadow-sm mb-3">
+          <h3 className="text-gray-800 font-semibold text-sm mb-2">Summary</h3>
+          <p className="text-gray-500 text-[10px] mb-0.5">You spent</p>
+          <p className="text-gray-900 font-bold text-2xl mb-0.5">RM {spending.toFixed(2)}</p>
+          <p className="text-gray-400 text-[10px]">This month</p>
         </div>
       </div>
 
-      {/* Voice Assistant Button */}
-      <div className="px-6 pb-8">
-        <button className="w-full bg-white rounded-2xl p-6 flex items-center justify-center gap-4 shadow-xl active:scale-[0.98] transition-transform">
-          <div className="bg-[#0066CC] rounded-full p-3">
-            <Mic className="w-8 h-8 text-white" />
-          </div>
-          <span className="text-2xl font-bold text-[#0066CC]">TnG Suara</span>
+      {/* Voice Assistant Button - Fixed at Bottom */}
+      <div className="px-3 pb-4 pt-2 bg-[#F3F4F6] shrink-0">
+        <button className="w-full bg-[#1873CC] rounded-xl py-3 flex items-center justify-center gap-2.5 shadow-lg active:bg-[#1461A8]">
+          <Mic className="w-5 h-5 text-white" />
+          <span className="text-lg font-bold text-white">TnG Suara</span>
         </button>
       </div>
     </div>
