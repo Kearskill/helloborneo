@@ -57,7 +57,9 @@ export default function App() {
           </button>
         </div>
 
-        <button className="w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-center gap-2 border border-white/40 active:scale-[0.98] transition-transform">
+        <button
+          onClick={() => router.push("/MoreServices")}
+          className="w-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 flex items-center justify-center gap-2 border border-white/40 active:scale-[0.98] transition-transform">
           <span className="text-white font-semibold">See More</span>
           <ChevronRight className="w-5 h-5 text-white" />
         </button>
