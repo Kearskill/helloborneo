@@ -36,3 +36,5 @@ This project aims to increase the adoption of the Touch 'n Go (TnG) eWallet in E
 1. **Linguistic Analysis:** The app uses the Qwen AI model to classify user intent from voice or text input, specifically trained to recognize local East Malaysian languages.
 2. **Contextual Guidance:** Based on the identified intent (e.g., "Transfer money to John"), the app initiates a guided flow using `GuideContext`.
 3. **Voice Feedback:** AWS Polly generates audio responses. For languages like Iban and Kadazan/Dusun, the system uses custom **Lexicons** to ensure accurate pronunciation and natural-sounding speech, even for dialects not natively supported by standard TTS engines.
+
+Try our app [here](https://main.d2f2lacajutv1y.amplifyapp.com)
