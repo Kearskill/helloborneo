@@ -5,11 +5,13 @@ import { Mic, Send, Loader2 } from "lucide-react"
 import { cn } from "@/app/components/ui/utils"
 import { usePathname } from "next/navigation"
 import { useGuide } from "@/app/context/GuideContext"
+import { useLanguage } from "@/app/context/LanguageContext"
 import { processAiQuery } from "@/app/actions"
 
 export function VoiceAssistant() {
   const pathname = usePathname()
   const { startGuide } = useGuide()
+  const { speakText, language } = useLanguage()
   const [isActive, setIsActive] = useState(false)
   const [visualizerHeights, setVisualizerHeights] = useState<string[]>([])
   const [transcript, setTranscript] = useState("")
@@ -28,13 +30,62 @@ export function VoiceAssistant() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const query = transcript.trim()
+    const query = transcript.trim().toLowerCase()
     if (!query || isProcessing) return
 
     setTranscript("")
     setIsProcessing(true)
 
     try {
+      console.log('Query:', query, 'Language:', language);
+      
+      // Keyword matching for Kadazan/Iban audio
+      if (language === 'kadazan' || language === 'iban' || language === 'dusun') {
+        console.log('Checking keywords for', language);
+        let audioPlayed = false;
+        
+        // Match keywords to audio
+        if (query.includes('pindah') || query.includes('transfer') || query.includes('hantar')) {
+          console.log('Matched: transfer');
+          if (query.match(/\d+/) && query.match(/bagi|to|kepada/)) {
+            // Has amount and recipient - play amount_next
+            await speakText('amount next');
+            audioPlayed = true;
+            setFeedback('Enter amount and recipient');
+          } else {
+            // Just transfer keyword - play transfer_money
+            await speakText('transfer money');
+            audioPlayed = true;
+            setFeedback('Opening transfer');
+          }
+        } else if (query.includes('sejarah') || query.includes('sejara') || query.includes('history') || query.includes('sajara')) {
+          console.log('Matched: sejarah/history');
+          await speakText('summary');
+          audioPlayed = true;
+          setFeedback('Opening history');
+        } else if (query.includes('sken') || query.includes('scan') || query.includes('imbas')) {
+          console.log('Matched: scan');
+          await speakText('scan');
+          audioPlayed = true;
+          setFeedback('Opening scan');
+        } else if (query.includes('resit') || query.includes('receipt') || query.includes('recepeint')) {
+          console.log('Matched: receipt');
+          await speakText('receipt');
+          audioPlayed = true;
+          setFeedback('Showing receipt');
+        }
+        
+        console.log('Audio played:', audioPlayed);
+        
+        if (audioPlayed) {
+          setIsProcessing(false);
+          setTimeout(() => setFeedback(""), 3000);
+          return;
+        }
+      }
+
+      console.log('Falling back to Qwen AI');
+      // Fall back to Qwen AI for other cases
       const result = await processAiQuery(query)
       console.log("Qwen AI Response:", result);
 
@@ -43,9 +94,14 @@ export function VoiceAssistant() {
       } else if (result.data) {
         const { type, recipient, amount, reasoning } = result.data
 
-
         if (type === "transaction" && recipient && amount) {
+          // Play transfer audio for Iban/Kadazan
+          if (language === 'iban' || language === 'kadazan' || language === 'dusun') {
+            await speakText('transfer money')
+          }
+          
           startGuide(recipient.toString(), amount.toString())
+          setFeedback(`Guiding: Transfer RM${amount} to ${recipient}`)
           setIsActive(false)
         } else {
           setFeedback(reasoning || "How else can I help you today?")
@@ -54,14 +110,12 @@ export function VoiceAssistant() {
         setFeedback(result.text)
       }
     } catch (err) {
-      console.error("Failed to process AI query:", err)
+      console.error("Failed to process query:", err)
       setFeedback("Sorry, I encountered an error. Please try again.")
     } finally {
       setIsProcessing(false)
       setTimeout(() => setFeedback(""), 5000)
     }
-    setTranscript("")
-    setTimeout(() => setFeedback(""), 3000)
   }
 
   return (
