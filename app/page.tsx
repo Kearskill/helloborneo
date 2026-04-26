@@ -39,6 +39,12 @@ const FIELD_PROMPTS: Record<Language, Record<FieldKey, string>> = {
     email: "Dii nopo! Tuntuki alamat e-mel nu.",
     done:  "Naatad! Kotomod Naatad.",
   },
+  kadazan: {
+    name:  "Hai! Tuntuki ngaranan kosilou nu.",
+    phone: "Ayo! Tuntuki numburu tilipun nu.",
+    email: "Dii nopo! Tuntuki alamat e-mel nu.",
+    done:  "Naatad! Kotomod Naatad.",
+  },
 };
 
 function WaveBar({ delay }: { delay: string }) {
