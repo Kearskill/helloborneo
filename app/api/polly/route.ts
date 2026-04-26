@@ -1,34 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PollyClient, SynthesizeSpeechCommand, VoiceId } from '@aws-sdk/client-polly';
 
-const polly = new PollyClient({
-  region: process.env.AWS_REGION || 'ap-southeast-5',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-});
+// Initialize Polly client lazily
+let pollyClient: PollyClient | null = null;
+
+function getPollyClient() {
+  if (!pollyClient) {
+    pollyClient = new PollyClient({
+      region: process.env.MY_AWS_REGION || 'ap-southeast-5',
+      credentials: {
+        accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY!,
+      },
+    });
+  }
+  return pollyClient;
+}
 
 export async function POST(request: NextRequest) {
   try {
     const { text, language } = await request.json();
 
-    console.log('Polly request:', { text, language });
+    console.log('Polly request:', { text, language, region: process.env.MY_AWS_REGION });
 
     // Determine voice and lexicon based on language
-    let voiceId = 'Joanna'; // Default English
+    let voiceId: VoiceId = VoiceId.Joanna; // Default English
     let lexiconNames: string[] | undefined = undefined;
 
     if (language === 'malay') {
-      voiceId = process.env.POLLY_VOICE_ID_MS || 'Rizwan';
+      voiceId = VoiceId.Rizwan;
     } else if (language === 'iban') {
-      voiceId = 'Joanna'; // Use English voice with Iban lexicon
+      voiceId = VoiceId.Joanna; // Use English voice with Iban lexicon
       lexiconNames = [process.env.POLLY_LEXICON_IBAN || 'IbanLexicon'];
       console.log('Using Iban lexicon:', lexiconNames);
-    } else if (language === 'dusun') {
-      voiceId = 'Joanna';
+    } else if (language === 'kadazan') {
+      voiceId = VoiceId.Joanna;
       lexiconNames = [process.env.POLLY_LEXICON_KADAZAN || 'KadazanLexicon'];
       console.log('Using Kadazan lexicon:', lexiconNames);
+    } else if (language === 'dusun') {
+      voiceId = VoiceId.Joanna;
+      lexiconNames = [process.env.POLLY_LEXICON_KADAZAN || 'KadazanLexicon'];
+      console.log('Using Kadazan lexicon for Dusun:', lexiconNames);
     }
 
     const command = new SynthesizeSpeechCommand({
@@ -39,6 +51,7 @@ export async function POST(request: NextRequest) {
       LexiconNames: lexiconNames,
     });
 
+    const polly = getPollyClient();
     const response = await polly.send(command);
 
     if (!response.AudioStream) {
@@ -60,8 +73,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Polly API error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to synthesize speech' },
+      { error: `Failed to synthesize speech: ${errorMessage}` },
       { status: 500 }
     );
   }
