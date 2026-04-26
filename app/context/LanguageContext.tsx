@@ -16,6 +16,7 @@ const LANGUAGE_GREETINGS: Record<Language, string> = {
   malay: 'selamat datang',
   iban: 'getting started',
   dusun: 'getting started',
+  kadazan: 'getting started',
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
