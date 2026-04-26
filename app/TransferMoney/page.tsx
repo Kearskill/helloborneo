@@ -6,7 +6,7 @@ import { useGuide } from "@/app/context/GuideContext";
 import { useLanguage } from '../context/LanguageContext';
 
 function TransferMoneyContent() {
-  const { t } = useLanguage(); // Called inside the component
+  const { t, speakText, language } = useLanguage(); // Add speakText and language
   const router = useRouter();
   const params = useSearchParams();
 
@@ -17,6 +17,7 @@ function TransferMoneyContent() {
   const balance = 125.50;
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState(t.fundTransfer || "Fund Transfer");
+  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
 
   const amountRef = useRef<HTMLInputElement>(null);
 
@@ -40,6 +41,12 @@ function TransferMoneyContent() {
     if (parts.length > 2) return;
     if (parts[1]?.length > 2) return;
     setAmount(val);
+    
+    // Play audio when user enters amount (for Kadazan/Iban/Dusun)
+    if (val && !hasPlayedAudio && (language === 'kadazan' || language === 'iban' || language === 'dusun')) {
+      speakText('amount next');
+      setHasPlayedAudio(true);
+    }
   };
 
   return (

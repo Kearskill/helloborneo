@@ -4,10 +4,12 @@ import { ArrowLeftRight, Scan, History, ChevronRight, Eye, Search, Bell, User, C
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGuide } from "@/app/context/GuideContext";
+import { useLanguage } from '../context/LanguageContext';
 
 export default function App() {
   const router = useRouter();
   const { guide, advanceGuide } = useGuide();
+  const { t } = useLanguage();
   const [balance] = useState(251.82);
   const [spending] = useState(450.75);
 
@@ -29,7 +31,7 @@ export default function App() {
             <Search className="w-4 h-4 text-gray-400 shrink-0" />
             <input
               type="text"
-              placeholder="Find products & services"
+              placeholder={t.enterNameOrPhone}
               className="flex-1 text-sm text-gray-600 outline-none bg-transparent placeholder:text-gray-400"
             />
           </div>
@@ -50,7 +52,7 @@ export default function App() {
             <Eye className="w-5 h-5 text-white/80" />
           </div>
           <button className="text-white/80 text-xs flex items-center gap-0.5">
-            View balance details
+            {t.viewBalanceDetails}
             <ChevronRight className="w-3 h-3" />
           </button>
         </div>
@@ -58,13 +60,13 @@ export default function App() {
         {/* Add money / Transactions */}
         <div className="flex gap-2 items-center">
           <button className="border-2 border-white rounded-full px-4 py-1.5 text-white font-semibold text-sm">
-            + Add money
+            {t.addMoney}
           </button>
           <button
             onClick={() => router.push("/homepage/history")}
             className="text-white/90 font-semibold text-sm flex items-center gap-0.5"
           >
-            Transactions
+            {t.transactions}
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -75,9 +77,9 @@ export default function App() {
 
         {/* Summary card — directly below header */}
         <div className="bg-white rounded-2xl px-5 py-4 shadow-sm">
-          <p className="text-gray-400 text-xs mb-1">Monthly Summary</p>
+          <p className="text-gray-400 text-xs mb-1">{t.summary}</p>
           <p className="text-gray-900 font-bold text-3xl leading-tight">RM {spending.toFixed(2)}</p>
-          <p className="text-gray-400 text-xs mt-1">spent this month</p>
+          <p className="text-gray-400 text-xs mt-1">{t.youSpent} {t.thisMonth.toLowerCase()}</p>
         </div>
 
         {/* 2×2 action grid */}
@@ -93,7 +95,7 @@ export default function App() {
             <div className="w-16 h-16 bg-[#EBF3FF] rounded-full flex items-center justify-center">
               <ArrowLeftRight className="w-8 h-8 text-[#1873CC] stroke-[1.5]" />
             </div>
-            <span className="text-base font-semibold text-gray-800">Transfer</span>
+            <span className="text-base font-semibold text-gray-800">{t.transfer}</span>
           </button>
 
           {/* Scan */}
@@ -104,7 +106,7 @@ export default function App() {
             <div className="w-16 h-16 bg-[#EBF3FF] rounded-full flex items-center justify-center">
               <Scan className="w-8 h-8 text-[#1873CC] stroke-[1.5]" />
             </div>
-            <span className="text-base font-semibold text-gray-800">Scan</span>
+            <span className="text-base font-semibold text-gray-800">{t.scan}</span>
           </button>
 
           {/* History */}
@@ -115,7 +117,7 @@ export default function App() {
             <div className="w-16 h-16 bg-[#EBF3FF] rounded-full flex items-center justify-center">
               <History className="w-8 h-8 text-[#1873CC] stroke-[1.5]" />
             </div>
-            <span className="text-base font-semibold text-gray-800">History</span>
+            <span className="text-base font-semibold text-gray-800">{t.history}</span>
           </button>
 
           {/* See More */}
@@ -126,7 +128,7 @@ export default function App() {
             <div className="w-16 h-16 bg-[#EBF3FF] rounded-full flex items-center justify-center">
               <LayoutGrid className="w-8 h-8 text-[#1873CC] stroke-[1.5]" />
             </div>
-            <span className="text-base font-semibold text-gray-800">See More</span>
+            <span className="text-base font-semibold text-gray-800">{t.seeMore}</span>
           </button>
 
         </div>

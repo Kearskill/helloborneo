@@ -19,6 +19,10 @@ const AUDIO_MAP: Record<string, string> = {
   'iban_full_name': 'iban/iban_full_name.wav',
   'iban_email': 'iban/iban_email.wav',
   'iban_phone': 'iban/iban_phone.wav',
+  'iban_amount_next': 'iban2/iban_amount_next.wav',
+  'iban_receipt': 'iban2/iban_receipt.wav',
+  'iban_summary': 'iban2/iban_summary.wav',
+  'iban_transfer': 'iban2/iban_transfer.wav',
   
   // Kadazan audio files
   'kadazan_getting_started': 'kadazan/kadazan_getting_started.wav',
@@ -26,6 +30,10 @@ const AUDIO_MAP: Record<string, string> = {
   'kadazan_full_name': 'kadazan/kadazan_full_name.wav',
   'kadazan_email': 'kadazan/kadazan_email.wav',
   'kadazan_phone': 'kadazan/kadazan_phone.wav',
+  'kadazan_amount_next': 'kadazan_amount_next.wav',
+  'kadazan_receipt': 'kadazan_recepeint.wav',
+  'kadazan_summary': 'kadazan_summary.wav',
+  'kadazan_transfer_money': 'kadazan_transfer_money.wav',
 };
 
 export async function POST(request: NextRequest) {
